@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平成プロフ帳メーカー</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Potta+One&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            /* 平成ポップカラー */
+            --pop-cyan: #00E5FF;
+            --pop-pink: #FF4081;
+            --pop-yellow: #FFEB3B;
+            
+            --bg-pink-pop: #FFD1DC;
+            --bg-blue-pop: #E0F7FA;
+            
+            --text-color: #333;
+            --font-hand: 'Yomogi', cursive;
+            --font-title: 'Potta One', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #f0f0f0; font-family: var(--font-hand); color: var(--text-color); font-weight: 700; padding-bottom: 50px; }
+
+        .app-container { max-width: 600px; margin: 0 auto; min-height: 100vh; background: #fff; display: flex; flex-direction: column; }
+
+        /* ヘッダー */
+        .pop-header {
+            background: linear-gradient(45deg, var(--pop-pink), var(--pop-cyan));
+            padding: 15px; text-align: center; color: #fff; border-bottom: 5px dotted #fff;
+        }
+        .pop-header h1 {
+            font-family: var(--font-title); font-size: 24px; text-shadow: 2px 2px 0 #000; letter-spacing: 1px;
+        }
+
+        .page { display: none; padding: 10px; }
+        .page.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .preview-wrapper { background: #eee; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+        .preview-stage { width: 100%; position: relative; overflow: hidden; }
+
+        /* === 本体 (1400x1000) === */
+        #capture-area { width: 1400px; height: 1000px; transform-origin: top left; background: #fff; }
+        #prof-book { width: 1400px; height: 1000px; display: flex; position: relative; overflow: hidden; }
+
+        .page-left, .page-right { flex: 1; padding: 30px; position: relative; display: flex; flex-direction: column; gap: 15px; }
+
+        /* --- 左ページ (ピンク) --- */
+        .page-left {
+            background-color: var(--bg-pink-pop);
+            border-right: 2px solid #ccc;
+            background-image: radial-gradient(#fff 20%, transparent 20%);
+            background-size: 30px 30px;
+        }
+        .header-decoration { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+        .header-title { font-family: var(--font-title); font-size: 48px; color: #fff; text-shadow: 3px 3px 0 var(--pop-pink), 5px 5px 0 #fff; -webkit-text-stroke: 2px #fff; letter-spacing: 2px; }
+
+        /* 1. プロフィール */
+        .profile-sheet-pop {
+            flex: 4; background: #fff; border-radius: 30px;
+            padding: 25px; position: relative; border: 5px solid var(--pop-pink);
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        /* 写真枠 */
+        .photo-box-pop {
+            position: absolute; top: 45px; right: 20px;
+            width: 180px; height: 180px; background: #f9f9f9;
+            border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; z-index: 2;
+        }
+        .photo-box-pop img { width: 100%; height: 100%; object-fit: cover; }
+        #icon-placeholder { color: #ccc; font-size: 24px; font-family: var(--font-title); }
+
+        .intro-text-pop { display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 5px; font-size: 21px; line-height: 1.6; padding-top: 10px; }
+        
+        /* 修正：文字の下側を表示させるためにパディングを追加 */
+        .line-pop { 
+            display: flex; align-items: baseline; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            max-width: 100%;
+            padding-bottom: 5px; 
+        }
+        .row-nowrap { flex-wrap: nowrap; }
+
+        /* 行のレイアウト制御 */
+        .row-top-constrained {
+            width: calc(100% - 200px);
+            margin-bottom: 5px;
+        }
+        .row-short { width: calc(100% - 200px); margin-bottom: 5px; }
+        .row-mid { margin-top: 5px; margin-bottom: 10px; }
+        
+        /* 修正：趣味欄と写真の距離を離す */
+        .mt-balance { margin-top: 25px; } 
+        
+        .row-full { width: 100%; margin-bottom: 5px; }
+
+        .mt-2 { margin-top: 10px; }
+        .mt-4 { margin-top: 20px; }
+
+        /* 入力欄 */
+        .fill-line {
+            border-bottom: 3px solid var(--text-color); padding: 0 5px; margin: 0 3px;
+            text-align: center; color: var(--text-color); display: inline-block;
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden; 
+            vertical-align: bottom;
+            max-width: 100%; 
+            min-width: 0;
+            padding-bottom: 1px;
+        }
+        .fill-line:empty::before {
+            content: attr(data-ph); color: #ddd; font-size: 18px; pointer-events: none;
+        }
+
+        .fill-line.name-wide { min-width: 100px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; max-width: 250px; }
+        .fill-line.long-text { flex: 1; text-align: left; }
+        .fill-line.grow { flex: 1; text-align: center; min-width: 0; } 
+        .fill-line.md { min-width: 120px; max-width: 180px; }
+        .fill-line.sm { min-width: 80px; max-width: 120px; }
+        .fill-line.xs { min-width: 50px; max-width: 70px; }
+
+        /* 2. MY FAVORITE */
+        .favorite-section-grid {
+            flex: 6.5; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 15px;
+            border: 4px dashed var(--pop-cyan); display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .fav-title-pop { text-align: center; font-family: var(--font-title); font-size: 30px; color: var(--pop-cyan); text-shadow: 2px 2px 0 #fff; -webkit-text-stroke: 1px #fff; margin-bottom: 10px; }
+        .fav-grid-container {
+            flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+        .fav-col { display: flex; flex-direction: column; gap: 10px; justify-content: space-between; }
+        .fav-box {
+            flex: 1; background: #fff; border: 3px solid var(--pop-pink); border-radius: 10px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.05); position: relative;
+            overflow: hidden;
+        }
+        .fb-head {
+            position: absolute; top: 2px; left: 5px; font-size: 14px; font-weight: bold; 
+            color: var(--pop-pink); background: #fff; padding: 0 5px; border-radius: 5px;
+        }
+        .fb-val {
+            width: 90%; border-bottom: none; text-align: center; font-size: 20px;
+            margin-top: 15px; white-space: nowrap; overflow: hidden;
+            padding-bottom: 3px;
+        }
+
+        /* --- 右ページ (水色) --- */
+        .page-right {
+            background-color: var(--bg-blue-pop);
+            border-left: 2px solid #ccc;
+            background-image: repeating-linear-gradient(0deg, #fff, #fff 2px, transparent 2px, transparent 40px);
+        }
+
+        /* 上段 */
+        .right-top-section { display: flex; gap: 15px; height: 420px; margin-bottom: 15px; overflow: hidden; }
+
+        /* Question */
+        .question-memo-fitted {
+            flex: 1.4; background: #fff; border-radius: 5px; border: 2px solid #aaa;
+            padding: 15px 10px 10px 30px; position: relative;
+            background-image: linear-gradient(to bottom, transparent 38px, #eee 2px); 
+            background-size: 100% 40px;
+            background-position: 0 -13px; 
+            overflow: hidden;
+        }
+        .note-ring-holes {
+            position: absolute; left: 8px; top: 0; bottom: 0; width: 20px;
+            background: radial-gradient(circle at 50% 50%, #bbb 25%, transparent 25%); background-size: 20px 40px;
+        }
+        .memo-title { font-family: var(--font-title); font-size: 28px; color: #ccc; margin-top: -10px; text-shadow: 1px 1px 0 #fff; -webkit-text-stroke: 1px #fff; background: rgba(255,255,255,0.9); display: inline-block; padding-right: 10px; }
+
+        .memo-lines-fitted { 
+            margin-top: 10px; height: 90%; 
+            display: flex; flex-direction: column; justify-content: space-around; 
+        }
+        .nl { height: 40px; display: flex; align-items: center; padding-bottom: 0; overflow: hidden; }
+        .nq { font-size: 14px; color: #555; white-space: nowrap; margin-right: 5px; flex-shrink: 0; }
+        .na { flex: 1; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; color: #000; min-width: 0; }
+
+        /* 右カラム */
+        .right-col-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+
+        .choices-box-pop {
+            flex: 2; background: #fff; border-radius: 10px; padding: 10px 15px;
+            border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; 
+            justify-content: space-evenly; 
+            overflow: hidden;
+        }
+        .box-head { font-family: var(--font-title); font-size: 22px; color: var(--pop-cyan); text-align: center; -webkit-text-stroke: 1px #fff; margin-bottom: 5px; }
+        .cl-item { margin-bottom: 2px; font-size: 12px; text-align: center; }
+        .cq { font-size: 11px; color: #888; display: block; }
+        .ca { font-weight: bold; font-size: 15px; white-space: nowrap; }
+        .opt { padding: 0 4px; border-radius: 50%; }
+        .opt.circled { border: 3px solid var(--pop-pink); color: var(--pop-pink); transform: rotate(-3deg); display: inline-block; font-weight: 900; }
+
+        .secret-box-pop {
+            flex: 1.2; background: #fff; border-radius: 10px; padding: 10px;
+            border: 4px solid var(--pop-pink); position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .box-head-s { font-family: var(--font-title); font-size: 20px; color: var(--pop-pink); text-align: center; }
+        .sec-body-center { 
+            font-size: 15px; color: #555; flex: 1; 
+            display: flex; flex-direction: column; 
+            justify-content: center;
+            gap: 10px;
+        }
+        .sec-row { margin-bottom: 0; }
+        .sec-val-long { border-bottom: 2px dashed #888; width: 70%; display: inline-block; text-align: center; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; }
+        
+        /* 修正：右寄せ */
+        .end-text { align-self: flex-end; width: auto; margin-right: 10px; }
+
+        /* 中段：MY BEST */
+        .best-section-pop {
+            flex: 2.5; background: #fff; border-radius: 15px; padding: 10px;
+            border: 4px solid var(--pop-yellow); margin-bottom: 15px; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .best-header-row { display: flex; align-items: baseline; margin-bottom: 5px; }
+        .best-main-title { font-family: var(--font-title); font-size: 24px; color: #FFD700; text-shadow: 1px 1px 0 #fff; -webkit-text-stroke: 1px #888; margin-left: 10px; }
+        .best-sub-title { font-size: 12px; color: #888; font-weight: bold; margin-left: 10px; }
+        .best-grid-pop { display: flex; gap: 10px; flex: 1; }
+        .b-col { flex: 1; background: #FFFDE7; border-radius: 8px; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; overflow: hidden; }
+        .b-theme { height: 26px; background: #B0BEC5; border-radius: 5px; margin-bottom: 5px; font-size: 13px; color: #fff; text-align: center; line-height: 26px; white-space: nowrap; overflow: hidden; font-weight: bold; }
+        .b-theme.pink { background: var(--pop-pink); }
+        .b-theme.purple { background: #AB47BC; }
+        .b-list { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; }
+        .b-row { display: flex; align-items: center; font-size: 18px; }
+        .b-rank { display: inline-block; width: 20px; height: 20px; background: #555; color: #fff; border-radius: 50%; font-size: 12px; text-align: center; line-height: 20px; margin-right: 4px; }
+        .b-val { flex: 1; border-bottom: 2px solid #fff; white-space: nowrap; overflow: hidden; min-width: 0; }
+
+        /* 下段：Free Space */
+        .free-section-pop {
+            flex: 2; background: var(--pop-cyan); border-radius: 15px; padding: 10px; border: 4px solid #fff;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .free-head-pop { font-family: var(--font-title); font-size: 24px; color: #fff; text-shadow: 1px 1px 0 #aaa; margin-bottom: 5px; margin-left: 10px; }
+        .free-body-pop { flex: 1; background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; font-size: 20px; white-space: pre-wrap; line-height: 2.0; overflow: hidden; color: #000; }
+
+        /* リング */
+        .binder-rings { width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; z-index: 20; background: rgba(0,0,0,0.02); }
+        .ring { width: 70px; height: 18px; background: linear-gradient(90deg, #ccc, #fff, #bbb); border-radius: 9px; border: 1px solid #999; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        /* UIボタン */
+        .gen-btn.pop-btn { width: 100%; padding: 15px; background: var(--pop-pink); color: #fff; font-family: var(--font-title); font-size: 1.4rem; border: none; border-radius: 50px; cursor: pointer; margin-bottom: 30px; box-shadow: 0 5px 0 #C2185B; transition: transform 0.1s; }
+        .gen-btn.pop-btn:active { transform: translateY(5px); box-shadow: none; }
+
+        .result-title { text-align: center; color: var(--pop-pink); font-family: var(--font-title); font-size: 2rem; margin-bottom: 20px; text-shadow: 2px 2px 0 #fff; }
+        .save-btn.orange-btn { display: block; width: 80%; margin: 20px auto; padding: 15px; background: #FF9800; color: #fff; font-family: var(--font-title); border: none; border-radius: 50px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 0 #E65100; transition: transform 0.1s; }
+        .save-btn.orange-btn:active { transform: translateY(4px); box-shadow: none; }
+
+        .back-btn-container { text-align: center; margin-top: 20px; }
+        .back-btn.decorated-btn { padding: 10px 30px; background: #fff; color: var(--pop-cyan); font-family: var(--font-title); border: 3px solid var(--pop-cyan); border-radius: 30px; font-size: 1rem; cursor: pointer; box-shadow: 2px 2px 0 #B2EBF2; }
+
+        /* 共通 */
+        .form-container { padding: 15px; background: #fff; }
+        .form-section { padding: 15px; border-radius: 10px; border: 2px solid #eee; margin-bottom: 20px; background: #fdfdfd; }
+        .form-section.pink { border-left: 5px solid var(--pop-pink); }
+        .form-section.blue { border-left: 5px solid var(--pop-cyan); }
+        .form-group, .form-row { margin-bottom: 12px; }
+        .form-row { display: flex; gap: 10px; }
+        .half { flex: 1; }
+        .third { flex: 1; }
+        label { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; color: #666; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; }
+        .form-label-qa { font-weight: bold; color: #777; margin: 15px 0 5px; border-bottom: 1px dashed #ccc; }
+        .c-btns { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+        .c-btn { padding: 5px 10px; border: 1px solid #ccc; background: #fff; border-radius: 15px; cursor: pointer; }
+        .c-btn.active { background: var(--pop-pink); color: #fff; border-color: var(--pop-pink); }
+        #result-area { margin: 20px auto; max-width: 100%; text-align: center; border: 3px dotted #ddd; padding: 5px; }
+        #generated-image { max-width: 100%; height: auto; }
+        #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top: 4px solid var(--pop-pink); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header class="pop-header">
+        <h1>✨平成プロフ帳メーカー✨</h1>
+    </header>
+
+    <div id="step1" class="page active">
+        <div class="preview-wrapper">
+            <p class="preview-label">▼ リアルタイムプレビュー</p>
+            <div class="preview-stage">
+                <div id="capture-area">
+                    <div id="prof-book" class="prof-book">
+                        
+                        <div class="page-left">
+                            <div class="header-decoration">
+                                <span class="header-title">MY PROFILE</span>
+                            </div>
+                            
+                            <div class="profile-sheet-pop">
+                                <div class="photo-box-pop">
+                                    <img id="preview-icon" src="" style="display:none;">
+                                    <div id="icon-placeholder">PHOTO</div>
+                                </div>
+                                
+                                <div class="intro-text-pop">
+                                    <div class="line-pop row-nowrap row-top-constrained">
+                                        <span class="fill-line sm auto-fit" id="prev-me" data-ph="(一人称)"></span> の名前は <span class="fill-line name-wide auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span> !
+                                    </div>
+                                    <div class="line-pop row-short">
+                                        <span class="fill-line grow auto-fit" id="prev-nick" data-ph="(あだ名)"></span> って呼んでね♡
+                                    </div>
+                                    
+                                    <div class="line-pop row-mid">
+                                        誕生日は<span class="fill-line xs auto-fit" id="prev-month">-</span>月<span class="fill-line xs auto-fit" id="prev-day">-</span>日なんだ！★
+                                    </div>
+
+                                    <div class="line-pop row-full mt-balance">
+                                        趣味は<span class="fill-line grow auto-fit" id="prev-hobby" data-ph=""></span>で
+                                    </div>
+                                    <div class="line-pop row-full mt-2">
+                                        特技は<span class="fill-line grow auto-fit" id="prev-skill" data-ph=""></span>だよ！
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="favorite-section-grid">
+                                <div class="fav-title-pop">MY FAVORITE</div>
+                                <div class="fav-grid-container">
+                                    <div class="fav-box"><span class="fb-head">たべもの</span><div class="fb-val auto-fit" id="prev-f-food"></div></div>
+                                    <div class="fav-box"><span class="fb-head">のみもの</span><div class="fb-val auto-fit" id="prev-f-drink"></div></div>
+                                    <div class="fav-box"><span class="fb-head">えいが</span><div class="fb-val auto-fit" id="prev-f-movie"></div></div>
+                                    <div class="fav-box"><span class="fb-head">おんがく</span><div class="fb-val auto-fit" id="prev-f-music"></div></div>
+                                    <div class="fav-box"><span class="fb-head">スポーツ</span><div class="fb-val auto-fit" id="prev-f-sport"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ゲーム</span><div class="fb-val auto-fit" id="prev-f-game"></div></div>
+                                    <div class="fav-box"><span class="fb-head">いろ</span><div class="fb-val auto-fit" id="prev-f-color"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ばしょ</span><div class="fb-val auto-fit" id="prev-f-place"></div></div>
+                                    <div class="fav-box"><span class="fb-head">どうぶつ</span><div class="fb-val auto-fit" id="prev-f-animal"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ブランド</span><div class="fb-val auto-fit" id="prev-f-fashion"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ことば</span><div class="fb-val auto-fit" id="prev-f-word"></div></div>
+                                    <div class="fav-box"><span class="fb-head">YouTuber</span><div class="fb-val auto-fit" id="prev-f-tv"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="binder-rings"></div>
+
+                        <div class="page-right">
+                            
+                            <div class="right-top-section">
+                                <div class="question-memo-fitted">
+                                    <div class="note-ring-holes"></div>
+                                    <div class="note-paper">
+                                        <div class="memo-title">Question</div>
+                                        <div class="memo-lines-fitted">
+                                            <div class="nl"><span class="mq">今欲しいものは？</span><span class="na auto-fit" id="prev-q1"></span></div>
+                                            <div class="nl"><span class="mq">行ってみたい所？</span><span class="na auto-fit" id="prev-q2"></span></div>
+                                            <div class="nl"><span class="mq">マイブームは？</span><span class="na auto-fit" id="prev-q4"></span></div>
+                                            <div class="nl"><span class="mq">毎日欠かさない事？</span><span class="na auto-fit" id="prev-q5"></span></div>
+                                            <div class="nl"><span class="mq">宝くじ当たったら？</span><span class="na auto-fit" id="prev-q6"></span></div>
+                                            <div class="nl"><span class="mq">無人島に持つ物は？</span><span class="na auto-fit" id="prev-q7"></span></div>
+                                            <div class="nl"><span class="mq">いつか叶えたい夢？</span><span class="na auto-fit" id="prev-q8"></span></div>
+                                            <div class="nl"><span class="mq">明日地球が終わるなら？</span><span class="na auto-fit" id="prev-q9"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="right-col-stack">
+                                    <div class="choices-box-pop">
+                                        <div class="box-head">Choices</div>
+                                        <div class="choice-list-tight">
+                                            <div class="cl-item" id="c1-prev"><div class="cq">きのこ派？たけのこ派？</div><div class="ca"><span class="opt">きのこ</span> or <span class="opt">たけのこ</span></div></div>
+                                            <div class="cl-item" id="c2-prev"><div class="cq">インドア派？アウトドア派？</div><div class="ca"><span class="opt">インドア</span> or <span class="opt">アウトドア</span></div></div>
+                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去に戻る</span> or <span class="opt">未来予知</span></div></div>
+                                            <div class="cl-item" id="c4-prev"><div class="cq">好きな季節は？</div><div class="ca"><span class="opt">春</span> <span class="opt">夏</span> <span class="opt">秋</span> <span class="opt">冬</span></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="secret-box-pop">
+                                        <div class="box-head-s">Secret Talk</div>
+                                        <div class="sec-body-center">
+                                            <div class="sec-row">ここだけの話、</div>
+                                            <div class="sec-row">実は <span class="sec-val-long auto-fit" id="prev-secret"></span></div>
+                                            <div class="sec-row end-text">です…</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="best-section-pop">
+                                <div class="best-header-row">
+                                    <span class="best-main-title">MY BEST 3</span>
+                                    <span class="best-sub-title">★じぶんだけのランキングをつくろう！★</span>
+                                </div>
+                                <div class="best-grid-pop">
+                                    <div class="b-col">
+                                        <div class="b-theme auto-fit" id="prev-rank1-title" data-ph="テーマ"></div>
+                                        <div class="b-list">
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank1-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank1-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank1-3"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="b-col">
+                                        <div class="b-theme pink auto-fit" id="prev-rank2-title" data-ph="テーマ"></div>
+                                        <div class="b-list">
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank2-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank2-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank2-3"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="b-col">
+                                        <div class="b-theme purple auto-fit" id="prev-rank3-title" data-ph="テーマ"></div>
+                                        <div class="b-list">
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank3-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank3-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank3-3"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="free-section-pop">
+                                <div class="free-head-pop">Free Space</div>
+                                <div class="free-body-pop" id="prev-free"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h3>✏️ 情報を入力してね</h3>
+            <div class="form-group date-input">
+                <label>DATE (日付)</label>
+                <input type="text" oninput="updateText('date', this.value)" placeholder="20XX / XX / XX">
+            </div>
+
+            <div class="form-section pink">
+                <h4>左ページ：MY PROFILE</h4>
+                <div class="form-group"><label>アイコン画像</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
+                
+                <div class="form-row">
+                    <div class="half"><label>一人称</label><input type="text" oninput="updateText('me', this.value)" placeholder="わたし"></div>
+                    <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ハンドルネーム"></div>
+                </div>
+                <div class="form-group"><label>あだ名</label><input type="text" oninput="updateText('nick', this.value)"></div>
+                
+                <div class="form-row">
+                    <div class="half">
+                        <label>誕生月</label>
+                        <select id="input-month" onchange="updateBirthday()">
+                            <option value="">-</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="half">
+                        <label>誕生日</label>
+                        <select id="input-day" onchange="updateBirthday()">
+                            <option value="">-</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                            <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
+                            <option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group"><label>趣味</label><input type="text" oninput="updateText('hobby', this.value)"></div>
+                <div class="form-group"><label>特技</label><input type="text" oninput="updateText('skill', this.value)"></div>
+
+                <div class="form-label-qa">MY FAVORITE (12項目)</div>
+                <div class="form-row"><div class="half"><label>たべもの</label><input type="text" oninput="updateText('f-food', this.value)"></div><div class="half"><label>のみもの</label><input type="text" oninput="updateText('f-drink', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>えいが</label><input type="text" oninput="updateText('f-movie', this.value)"></div><div class="half"><label>おんがく</label><input type="text" oninput="updateText('f-music', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>スポーツ</label><input type="text" oninput="updateText('f-sport', this.value)"></div><div class="half"><label>ゲーム</label><input type="text" oninput="updateText('f-game', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>いろ</label><input type="text" oninput="updateText('f-color', this.value)"></div><div class="half"><label>ばしょ</label><input type="text" oninput="updateText('f-place', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>どうぶつ</label><input type="text" oninput="updateText('f-animal', this.value)"></div><div class="half"><label>ブランド</label><input type="text" oninput="updateText('f-fashion', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>ことば</label><input type="text" oninput="updateText('f-word', this.value)"></div><div class="half"><label>YouTuber</label><input type="text" oninput="updateText('f-tv', this.value)"></div></div>
+            </div>
+
+            <div class="form-section blue">
+                <h4>右ページ：Q&A / BEST3</h4>
+                <div class="form-label-qa">Question</div>
+                <div class="form-group"><label>今欲しいものは？</label><input type="text" oninput="updateText('q1', this.value)"></div>
+                <div class="form-group"><label>行ってみたい所は？</label><input type="text" oninput="updateText('q2', this.value)"></div>
+                <div class="form-group"><label>マイブームは？</label><input type="text" oninput="updateText('q4', this.value)"></div>
+                <div class="form-group"><label>毎日欠かさないことは？</label><input type="text" oninput="updateText('q5', this.value)"></div>
+                <div class="form-group"><label>宝くじが当たったらどうする？</label><input type="text" oninput="updateText('q6', this.value)"></div>
+                <div class="form-group"><label>無人島に何を持っていく？</label><input type="text" oninput="updateText('q7', this.value)"></div>
+                <div class="form-group"><label>いつか叶えたい夢はある？</label><input type="text" oninput="updateText('q8', this.value)"></div>
+                <div class="form-group"><label>明日地球が終わるなら？</label><input type="text" oninput="updateText('q9', this.value)"></div>
+
+                <div class="form-label-qa">Choices</div>
+                <div class="choice-select-group">
+                    <p>きのこ派orたけのこ派？</p>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c1', 0, this)">きのこ</button><button class="c-btn" onclick="selectChoice('c1', 1, this)">たけのこ</button></div>
+                    <p>インドア派orアウトドア派？</p>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c2', 0, this)">インドア</button><button class="c-btn" onclick="selectChoice('c2', 1, this)">アウトドア</button></div>
+                    <p>欲しい力は？</p>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去に戻る</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
+                    <p>好きな季節は…</p>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c4', 0, this)">春</button><button class="c-btn" onclick="selectChoice('c4', 1, this)">夏</button><button class="c-btn" onclick="selectChoice('c4', 2, this)">秋</button><button class="c-btn" onclick="selectChoice('c4', 3, this)">冬</button></div>
+                </div>
+
+                <div class="form-label-qa">Secret Talk</div>
+                <div class="form-group"><label>実は「〇〇」です</label><input type="text" oninput="updateText('secret', this.value)"></div>
+
+                <div class="form-label-qa">MY BEST (テーマも書いてね)</div>
+                <div class="form-group"><input type="text" class="rank-theme" placeholder="テーマ1 (例:おかし)" oninput="updateText('rank1-title', this.value)"></div>
+                <div class="form-row"><div class="third"><input type="text" placeholder="1位" oninput="updateText('rank1-1', this.value)"></div><div class="third"><input type="text" placeholder="2位" oninput="updateText('rank1-2', this.value)"></div><div class="third"><input type="text" placeholder="3位" oninput="updateText('rank1-3', this.value)"></div></div>
+                
+                <div class="form-group"><input type="text" class="rank-theme" placeholder="テーマ2" oninput="updateText('rank2-title', this.value)"></div>
+                <div class="form-row"><div class="third"><input type="text" placeholder="1位" oninput="updateText('rank2-1', this.value)"></div><div class="third"><input type="text" placeholder="2位" oninput="updateText('rank2-2', this.value)"></div><div class="third"><input type="text" placeholder="3位" oninput="updateText('rank2-3', this.value)"></div></div>
+                
+                <div class="form-group"><input type="text" class="rank-theme" placeholder="テーマ3" oninput="updateText('rank3-title', this.value)"></div>
+                <div class="form-row"><div class="third"><input type="text" placeholder="1位" oninput="updateText('rank3-1', this.value)"></div><div class="third"><input type="text" placeholder="2位" oninput="updateText('rank3-2', this.value)"></div><div class="third"><input type="text" placeholder="3位" oninput="updateText('rank3-3', this.value)"></div></div>
+
+                <div class="form-label-qa">Free Space</div>
+                <div class="form-group"><textarea rows="4" oninput="updateText('free', this.value)"></textarea></div>
+            </div>
+
+            <button class="gen-btn pop-btn" onclick="generateImage()">これで作る！</button>
+        </div>
+    </div>
+
+    <div id="step2" class="page">
+        <h2 class="result-title">完成〜！✨</h2>
+        <div id="result-area">
+            <img id="generated-image" alt="生成画像">
+        </div>
+        <button class="save-btn orange-btn" onclick="saveImage()">画像をダウンロード！</button>
+        <div class="back-btn-container">
+            <button class="back-btn decorated-btn" onclick="backToEdit()">修正する</button>
+        </div>
+    </div>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>カキカキ中...</p>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        generateRings();
+        resizePreview();
+        updateText('rank1-title', 'MY BEST');
+        updateText('rank2-title', 'MY BEST');
+        updateText('rank3-title', 'MY BEST');
+    };
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resizePreview, 200);
+    });
+
+    function resizePreview() {
+        const area = document.getElementById('capture-area');
+        const stage = document.querySelector('.preview-stage');
+        if (!area || !stage) return;
+        const scale = stage.offsetWidth / 1400;
+        area.style.transform = `scale(${scale})`;
+        stage.style.height = (1000 * scale) + "px";
+    }
+
+    function generateRings() {
+        const container = document.querySelector('.binder-rings');
+        if (!container) return;
+        container.innerHTML = '';
+        for (let i = 0; i < 11; i++) {
+            const ring = document.createElement('div');
+            ring.className = 'ring';
+            container.appendChild(ring);
+        }
+    }
+
+    function updateText(id, val) {
+        const el = document.getElementById('prev-' + id);
+        if (el) {
+            el.innerText = val;
+            if (el.classList.contains('auto-fit')) {
+                adjustFontSize(el);
+            }
+        }
+    }
+
+    function updateBirthday() {
+        const m = document.getElementById('input-month').value || '-';
+        const d = document.getElementById('input-day').value || '-';
+        updateText('month', m);
+        updateText('day', d);
+    }
+
+    function adjustFontSize(el) {
+        let size = 32; 
+        if (el.classList.contains('name-wide')) size = 32;
+        else if (el.classList.contains('fill-line')) size = 22;
+        else if (el.classList.contains('fb-val')) size = 20;
+        else if (el.classList.contains('sec-val-long')) size = 18;
+        else size = 18;
+
+        el.style.fontSize = size + 'px';
+        while (el.scrollWidth > el.offsetWidth && size > 8) {
+            size--;
+            el.style.fontSize = size + 'px';
+        }
+    }
+
+    function updateIcon(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById('preview-icon');
+                const placeholder = document.getElementById('icon-placeholder');
+                if (img) {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function selectChoice(groupId, index, btn) {
+        const btnGroup = btn.parentElement;
+        const allBtns = btnGroup.querySelectorAll('.c-btn');
+        allBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const prevRow = document.getElementById(groupId + '-prev');
+        if (prevRow) {
+            const opts = prevRow.querySelectorAll('.opt');
+            opts.forEach(o => o.classList.remove('circled'));
+            if (opts[index]) {
+                opts[index].classList.add('circled');
+            }
+        }
+    }
+
+    let generatedBlobUrl = null;
+
+    async function generateImage() {
+        const loading = document.getElementById('loading');
+        const loadingText = loading.querySelector('p');
+        if(loadingText) loadingText.innerText = "カキカキ中...";
+        loading.style.display = 'flex';
+        window.scrollTo(0, 0);
+
+        const sandbox = document.createElement('div');
+        sandbox.style.position = 'fixed';
+        sandbox.style.top = '0';
+        sandbox.style.left = '-9999px';
+        sandbox.style.width = '1400px';
+        sandbox.style.height = '1000px';
+        sandbox.style.overflow = 'hidden';
+        sandbox.style.zIndex = '-9999';
+        document.body.appendChild(sandbox);
+
+        const original = document.getElementById('prof-book');
+        const clone = original.cloneNode(true);
+        sandbox.appendChild(clone);
+
+        try {
+            await new Promise(r => setTimeout(r, 1500));
+
+            const canvas = await html2canvas(clone, {
+                scale: 1.5,
+                useCORS: true,
+                backgroundColor: null,
+                logging: false
+            });
+
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+            generatedBlobUrl = URL.createObjectURL(blob);
+
+            const resultImg = document.getElementById('generated-image');
+            resultImg.src = generatedBlobUrl;
+            resultImg.style.display = 'block';
+
+            loading.style.display = 'none';
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            window.scrollTo(0, 0);
+            document.body.removeChild(sandbox);
+
+        } catch (err) {
+            console.error(err);
+            alert('画像の作成に失敗しました');
+            loading.style.display = 'none';
+            if (document.body.contains(sandbox)) {
+                document.body.removeChild(sandbox);
+            }
+        }
+    }
+
+    function saveImage() {
+        if (!generatedBlobUrl) {
+            alert('画像がまだできてないよ！');
+            return;
+        }
+        const link = document.createElement('a');
+        link.href = generatedBlobUrl;
+        link.download = `Heisei_Prof_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function backToEdit() {
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step1').classList.add('active');
+        setTimeout(resizePreview, 100);
+    }
+</script>
+</body>
+</html>
