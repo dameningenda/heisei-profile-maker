@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>平成プロフ帳メーカー</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Potta+One&display=swap" rel="stylesheet">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -37,7 +35,7 @@
             padding: 15px; text-align: center; color: #fff; border-bottom: 5px dotted #fff;
         }
         .pop-header h1 {
-            font-family: var(--font-title); font-size: 24px; text-shadow: 2px 2px 0 #000; letter-spacing: 1px;
+            font-family: var(--font-title); font-size: 24px; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; margin: 0;
         }
 
         .page { display: none; padding: 10px; }
@@ -68,7 +66,6 @@
             flex: 4; background: #fff; border-radius: 30px;
             padding: 25px; position: relative; border: 5px solid var(--pop-pink);
             box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-            overflow: hidden;
         }
         /* 写真枠 */
         .photo-box-pop {
@@ -80,30 +77,16 @@
         .photo-box-pop img { width: 100%; height: 100%; object-fit: cover; }
         #icon-placeholder { color: #ccc; font-size: 24px; font-family: var(--font-title); }
 
-        .intro-text-pop { display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 5px; font-size: 21px; line-height: 1.6; padding-top: 10px; }
-        
-        /* 修正：文字の下側を表示させるためにパディングを追加 */
-        .line-pop { 
-            display: flex; align-items: baseline; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            max-width: 100%;
-            padding-bottom: 5px; 
-        }
+        .intro-text-pop { display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 10px; font-size: 22px; line-height: 1.6; padding-top: 10px; }
+        .line-pop { display: flex; align-items: baseline; white-space: nowrap; }
         .row-nowrap { flex-wrap: nowrap; }
 
         /* 行のレイアウト制御 */
-        .row-top-constrained {
-            width: calc(100% - 200px);
-            margin-bottom: 5px;
-        }
-        .row-short { width: calc(100% - 200px); margin-bottom: 5px; }
-        .row-mid { margin-top: 5px; margin-bottom: 10px; }
-        
-        /* 修正：趣味欄と写真の距離を離す */
-        .mt-balance { margin-top: 25px; } 
-        
-        .row-full { width: 100%; margin-bottom: 5px; }
+        .row-short-top { margin-right: 190px; margin-bottom: 10px; }
+        .row-short { margin-right: 190px; margin-bottom: 10px; }
+        .row-mid { margin-top: 10px; margin-bottom: 15px; }
+        .mt-balance { margin-top: 10px; }
+        .row-full { width: 100%; margin-bottom: 10px; }
 
         .mt-2 { margin-top: 10px; }
         .mt-4 { margin-top: 20px; }
@@ -113,29 +96,22 @@
             border-bottom: 3px solid var(--text-color); padding: 0 5px; margin: 0 3px;
             text-align: center; color: var(--text-color); display: inline-block;
             position: relative;
-            white-space: nowrap;
-            overflow: hidden; 
-            vertical-align: bottom;
-            max-width: 100%; 
-            min-width: 0;
-            padding-bottom: 1px;
         }
         .fill-line:empty::before {
             content: attr(data-ph); color: #ddd; font-size: 18px; pointer-events: none;
         }
 
-        .fill-line.name-wide { min-width: 100px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; max-width: 250px; }
+        .fill-line.name-wide { min-width: 200px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; }
         .fill-line.long-text { flex: 1; text-align: left; }
-        .fill-line.grow { flex: 1; text-align: center; min-width: 0; } 
-        .fill-line.md { min-width: 120px; max-width: 180px; }
-        .fill-line.sm { min-width: 80px; max-width: 120px; }
-        .fill-line.xs { min-width: 50px; max-width: 70px; }
+        .fill-line.grow { flex: 1; text-align: center; } 
+        .fill-line.md { min-width: 120px; }
+        .fill-line.sm { min-width: 80px; }
+        .fill-line.xs { min-width: 50px; }
 
         /* 2. MY FAVORITE */
         .favorite-section-grid {
             flex: 6.5; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 15px;
             border: 4px dashed var(--pop-cyan); display: flex; flex-direction: column;
-            overflow: hidden;
         }
         .fav-title-pop { text-align: center; font-family: var(--font-title); font-size: 30px; color: var(--pop-cyan); text-shadow: 2px 2px 0 #fff; -webkit-text-stroke: 1px #fff; margin-bottom: 10px; }
         .fav-grid-container {
@@ -154,8 +130,7 @@
         }
         .fb-val {
             width: 90%; border-bottom: none; text-align: center; font-size: 20px;
-            margin-top: 15px; white-space: nowrap; overflow: hidden;
-            padding-bottom: 3px;
+            margin-top: 15px; white-space: nowrap; 
         }
 
         /* --- 右ページ (水色) --- */
@@ -166,7 +141,7 @@
         }
 
         /* 上段 */
-        .right-top-section { display: flex; gap: 15px; height: 420px; margin-bottom: 15px; overflow: hidden; }
+        .right-top-section { display: flex; gap: 15px; height: 420px; margin-bottom: 15px; }
 
         /* Question */
         .question-memo-fitted {
@@ -175,7 +150,6 @@
             background-image: linear-gradient(to bottom, transparent 38px, #eee 2px); 
             background-size: 100% 40px;
             background-position: 0 -13px; 
-            overflow: hidden;
         }
         .note-ring-holes {
             position: absolute; left: 8px; top: 0; bottom: 0; width: 20px;
@@ -189,17 +163,16 @@
         }
         .nl { height: 40px; display: flex; align-items: center; padding-bottom: 0; overflow: hidden; }
         .nq { font-size: 14px; color: #555; white-space: nowrap; margin-right: 5px; flex-shrink: 0; }
-        .na { flex: 1; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; color: #000; min-width: 0; }
+        .na { flex: 1; font-size: 18px; font-weight: bold; white-space: nowrap; color: #000; }
 
         /* 右カラム */
-        .right-col-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+        .right-col-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; }
 
         .choices-box-pop {
             flex: 2; background: #fff; border-radius: 10px; padding: 10px 15px;
             border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
             display: flex; flex-direction: column; 
             justify-content: space-evenly; 
-            overflow: hidden;
         }
         .box-head { font-family: var(--font-title); font-size: 22px; color: var(--pop-cyan); text-align: center; -webkit-text-stroke: 1px #fff; margin-bottom: 5px; }
         .cl-item { margin-bottom: 2px; font-size: 12px; text-align: center; }
@@ -212,7 +185,6 @@
             flex: 1.2; background: #fff; border-radius: 10px; padding: 10px;
             border: 4px solid var(--pop-pink); position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
             display: flex; flex-direction: column;
-            overflow: hidden;
         }
         .box-head-s { font-family: var(--font-title); font-size: 20px; color: var(--pop-pink); text-align: center; }
         .sec-body-center { 
@@ -223,32 +195,30 @@
         }
         .sec-row { margin-bottom: 0; }
         .sec-val-long { border-bottom: 2px dashed #888; width: 70%; display: inline-block; text-align: center; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; }
-        
-        /* 修正：右寄せ */
-        .end-text { align-self: flex-end; width: auto; margin-right: 10px; }
+        .sec-end { text-align: right; font-size: 15px; color: #555; }
 
         /* 中段：MY BEST */
         .best-section-pop {
             flex: 2.5; background: #fff; border-radius: 15px; padding: 10px;
-            border: 4px solid var(--pop-yellow); margin-bottom: 15px; display: flex; flex-direction: column; overflow: hidden;
+            border: 4px solid var(--pop-yellow); margin-bottom: 15px; display: flex; flex-direction: column;
         }
         .best-header-row { display: flex; align-items: baseline; margin-bottom: 5px; }
         .best-main-title { font-family: var(--font-title); font-size: 24px; color: #FFD700; text-shadow: 1px 1px 0 #fff; -webkit-text-stroke: 1px #888; margin-left: 10px; }
         .best-sub-title { font-size: 12px; color: #888; font-weight: bold; margin-left: 10px; }
         .best-grid-pop { display: flex; gap: 10px; flex: 1; }
-        .b-col { flex: 1; background: #FFFDE7; border-radius: 8px; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; overflow: hidden; }
+        .b-col { flex: 1; background: #FFFDE7; border-radius: 8px; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; }
         .b-theme { height: 26px; background: #B0BEC5; border-radius: 5px; margin-bottom: 5px; font-size: 13px; color: #fff; text-align: center; line-height: 26px; white-space: nowrap; overflow: hidden; font-weight: bold; }
         .b-theme.pink { background: var(--pop-pink); }
         .b-theme.purple { background: #AB47BC; }
         .b-list { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; }
         .b-row { display: flex; align-items: center; font-size: 18px; }
         .b-rank { display: inline-block; width: 20px; height: 20px; background: #555; color: #fff; border-radius: 50%; font-size: 12px; text-align: center; line-height: 20px; margin-right: 4px; }
-        .b-val { flex: 1; border-bottom: 2px solid #fff; white-space: nowrap; overflow: hidden; min-width: 0; }
+        .b-val { flex: 1; border-bottom: 2px solid #fff; white-space: nowrap; overflow: hidden; }
 
         /* 下段：Free Space */
         .free-section-pop {
             flex: 2; background: var(--pop-cyan); border-radius: 15px; padding: 10px; border: 4px solid #fff;
-            display: flex; flex-direction: column; overflow: hidden;
+            display: flex; flex-direction: column;
         }
         .free-head-pop { font-family: var(--font-title); font-size: 24px; color: #fff; text-shadow: 1px 1px 0 #aaa; margin-bottom: 5px; margin-left: 10px; }
         .free-body-pop { flex: 1; background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; font-size: 20px; white-space: pre-wrap; line-height: 2.0; overflow: hidden; color: #000; }
@@ -316,7 +286,7 @@
                                 </div>
                                 
                                 <div class="intro-text-pop">
-                                    <div class="line-pop row-nowrap row-top-constrained">
+                                    <div class="line-pop row-nowrap row-short-top">
                                         <span class="fill-line sm auto-fit" id="prev-me" data-ph="(一人称)"></span> の名前は <span class="fill-line name-wide auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span> !
                                     </div>
                                     <div class="line-pop row-short">
@@ -350,7 +320,7 @@
                                     <div class="fav-box"><span class="fb-head">どうぶつ</span><div class="fb-val auto-fit" id="prev-f-animal"></div></div>
                                     <div class="fav-box"><span class="fb-head">ブランド</span><div class="fb-val auto-fit" id="prev-f-fashion"></div></div>
                                     <div class="fav-box"><span class="fb-head">ことば</span><div class="fb-val auto-fit" id="prev-f-word"></div></div>
-                                    <div class="fav-box"><span class="fb-head">YouTuber</span><div class="fb-val auto-fit" id="prev-f-tv"></div></div>
+                                    <div class="fav-box"><span class="fb-head">YouTube/テレビ</span><div class="fb-val auto-fit" id="prev-f-tv"></div></div>
                                 </div>
                             </div>
                         </div>
@@ -364,7 +334,7 @@
                                     <div class="note-ring-holes"></div>
                                     <div class="note-paper">
                                         <div class="memo-title">Question</div>
-                                        <div class="memo-lines-fitted">
+                                        <div class="memo-lines-balanced">
                                             <div class="nl"><span class="mq">今欲しいものは？</span><span class="na auto-fit" id="prev-q1"></span></div>
                                             <div class="nl"><span class="mq">行ってみたい所？</span><span class="na auto-fit" id="prev-q2"></span></div>
                                             <div class="nl"><span class="mq">マイブームは？</span><span class="na auto-fit" id="prev-q4"></span></div>
@@ -383,7 +353,7 @@
                                         <div class="choice-list-tight">
                                             <div class="cl-item" id="c1-prev"><div class="cq">きのこ派？たけのこ派？</div><div class="ca"><span class="opt">きのこ</span> or <span class="opt">たけのこ</span></div></div>
                                             <div class="cl-item" id="c2-prev"><div class="cq">インドア派？アウトドア派？</div><div class="ca"><span class="opt">インドア</span> or <span class="opt">アウトドア</span></div></div>
-                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去に戻る</span> or <span class="opt">未来予知</span></div></div>
+                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去</span> or <span class="opt">未来予知</span></div></div>
                                             <div class="cl-item" id="c4-prev"><div class="cq">好きな季節は？</div><div class="ca"><span class="opt">春</span> <span class="opt">夏</span> <span class="opt">秋</span> <span class="opt">冬</span></div></div>
                                         </div>
                                     </div>
@@ -444,20 +414,16 @@
 
         <div class="form-container">
             <h3>✏️ 情報を入力してね</h3>
-            <div class="form-group date-input">
-                <label>DATE (日付)</label>
-                <input type="text" oninput="updateText('date', this.value)" placeholder="20XX / XX / XX">
-            </div>
-
+            
             <div class="form-section pink">
                 <h4>左ページ：MY PROFILE</h4>
-                <div class="form-group"><label>アイコン画像</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
+                <div class="form-group"><label>アイコン画像 (正方形)</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
                 
                 <div class="form-row">
                     <div class="half"><label>一人称</label><input type="text" oninput="updateText('me', this.value)" placeholder="わたし"></div>
                     <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ハンドルネーム"></div>
                 </div>
-                <div class="form-group"><label>あだ名</label><input type="text" oninput="updateText('nick', this.value)"></div>
+                <div class="form-group"><label>あだ名 (呼んでね！)</label><input type="text" oninput="updateText('nick', this.value)"></div>
                 
                 <div class="form-row">
                     <div class="half">
@@ -475,9 +441,8 @@
                         <select id="input-day" onchange="updateBirthday()">
                             <option value="">-</option>
                             <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
-                            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                            <option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
                             <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
                             <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
                             <option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
@@ -485,8 +450,8 @@
                     </div>
                 </div>
 
-                <div class="form-group"><label>趣味</label><input type="text" oninput="updateText('hobby', this.value)"></div>
-                <div class="form-group"><label>特技</label><input type="text" oninput="updateText('skill', this.value)"></div>
+                <div class="form-group"><label>趣味 (長めOK)</label><input type="text" oninput="updateText('hobby', this.value)"></div>
+                <div class="form-group"><label>特技 (長めOK)</label><input type="text" oninput="updateText('skill', this.value)"></div>
 
                 <div class="form-label-qa">MY FAVORITE (12項目)</div>
                 <div class="form-row"><div class="half"><label>たべもの</label><input type="text" oninput="updateText('f-food', this.value)"></div><div class="half"><label>のみもの</label><input type="text" oninput="updateText('f-drink', this.value)"></div></div>
@@ -494,7 +459,7 @@
                 <div class="form-row"><div class="half"><label>スポーツ</label><input type="text" oninput="updateText('f-sport', this.value)"></div><div class="half"><label>ゲーム</label><input type="text" oninput="updateText('f-game', this.value)"></div></div>
                 <div class="form-row"><div class="half"><label>いろ</label><input type="text" oninput="updateText('f-color', this.value)"></div><div class="half"><label>ばしょ</label><input type="text" oninput="updateText('f-place', this.value)"></div></div>
                 <div class="form-row"><div class="half"><label>どうぶつ</label><input type="text" oninput="updateText('f-animal', this.value)"></div><div class="half"><label>ブランド</label><input type="text" oninput="updateText('f-fashion', this.value)"></div></div>
-                <div class="form-row"><div class="half"><label>ことば</label><input type="text" oninput="updateText('f-word', this.value)"></div><div class="half"><label>YouTuber</label><input type="text" oninput="updateText('f-tv', this.value)"></div></div>
+                <div class="form-row"><div class="half"><label>ことば</label><input type="text" oninput="updateText('f-word', this.value)"></div><div class="half"><label>YouTube/テレビ</label><input type="text" oninput="updateText('f-tv', this.value)"></div></div>
             </div>
 
             <div class="form-section blue">
@@ -516,13 +481,13 @@
                     <p>インドア派orアウトドア派？</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c2', 0, this)">インドア</button><button class="c-btn" onclick="selectChoice('c2', 1, this)">アウトドア</button></div>
                     <p>欲しい力は？</p>
-                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去に戻る</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
                     <p>好きな季節は…</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c4', 0, this)">春</button><button class="c-btn" onclick="selectChoice('c4', 1, this)">夏</button><button class="c-btn" onclick="selectChoice('c4', 2, this)">秋</button><button class="c-btn" onclick="selectChoice('c4', 3, this)">冬</button></div>
                 </div>
 
                 <div class="form-label-qa">Secret Talk</div>
-                <div class="form-group"><label>実は「〇〇」です</label><input type="text" oninput="updateText('secret', this.value)"></div>
+                <div class="form-group"><label>実は「〇〇」なんです…</label><input type="text" oninput="updateText('secret', this.value)"></div>
 
                 <div class="form-label-qa">MY BEST (テーマも書いてね)</div>
                 <div class="form-group"><input type="text" class="rank-theme" placeholder="テーマ1 (例:おかし)" oninput="updateText('rank1-title', this.value)"></div>
@@ -555,185 +520,191 @@
 
     <div id="loading">
         <div class="spinner"></div>
-        <p>カキカキ中...</p>
+        <p>カキカキ中…✍🏻</p>
     </div>
 </div>
 
 <script>
-    window.onload = function() {
-        generateRings();
-        resizePreview();
-        updateText('rank1-title', 'MY BEST');
-        updateText('rank2-title', 'MY BEST');
-        updateText('rank3-title', 'MY BEST');
-    };
+window.onload = function() {
+    generateRings();
+    resizePreview();
+    
+    // 日付初期値 (入力欄は削除されたのでプレビュー反映処理は不要ですが、JS構造は維持)
+    updateText('rank1-title', 'MY BEST');
+    updateText('rank2-title', 'MY BEST');
+    updateText('rank3-title', 'MY BEST');
+};
 
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(resizePreview, 200);
-    });
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resizePreview, 200);
+});
 
-    function resizePreview() {
-        const area = document.getElementById('capture-area');
-        const stage = document.querySelector('.preview-stage');
-        if (!area || !stage) return;
-        const scale = stage.offsetWidth / 1400;
-        area.style.transform = `scale(${scale})`;
-        stage.style.height = (1000 * scale) + "px";
+function resizePreview() {
+    const area = document.getElementById('capture-area');
+    const stage = document.querySelector('.preview-stage');
+    if (!area || !stage) return;
+    const scale = stage.offsetWidth / 1400;
+    area.style.transform = `scale(${scale})`;
+    stage.style.height = (1000 * scale) + "px";
+}
+
+function generateRings() {
+    const container = document.querySelector('.binder-rings');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < 11; i++) {
+        const ring = document.createElement('div');
+        ring.className = 'ring';
+        container.appendChild(ring);
     }
+}
 
-    function generateRings() {
-        const container = document.querySelector('.binder-rings');
-        if (!container) return;
-        container.innerHTML = '';
-        for (let i = 0; i < 11; i++) {
-            const ring = document.createElement('div');
-            ring.className = 'ring';
-            container.appendChild(ring);
+function updateText(id, val) {
+    const el = document.getElementById('prev-' + id);
+    if (el) {
+        el.innerText = val;
+        // 文字数調整の対象クラスなら実行
+        if (el.classList.contains('auto-fit')) {
+            adjustFontSize(el);
         }
     }
+}
 
-    function updateText(id, val) {
-        const el = document.getElementById('prev-' + id);
-        if (el) {
-            el.innerText = val;
-            if (el.classList.contains('auto-fit')) {
-                adjustFontSize(el);
-            }
-        }
-    }
+// 誕生日更新用
+function updateBirthday() {
+    const m = document.getElementById('input-month').value || '-';
+    const d = document.getElementById('input-day').value || '-';
+    updateText('month', m);
+    updateText('day', d);
+}
 
-    function updateBirthday() {
-        const m = document.getElementById('input-month').value || '-';
-        const d = document.getElementById('input-day').value || '-';
-        updateText('month', m);
-        updateText('day', d);
-    }
+// フォントサイズ自動調整関数
+function adjustFontSize(el) {
+    let size = 32; // 最大サイズ
+    if (el.classList.contains('name-wide')) size = 32;
+    else if (el.classList.contains('fill-line')) size = 22;
+    else if (el.classList.contains('fb-val')) size = 20;
+    else size = 18;
 
-    function adjustFontSize(el) {
-        let size = 32; 
-        if (el.classList.contains('name-wide')) size = 32;
-        else if (el.classList.contains('fill-line')) size = 22;
-        else if (el.classList.contains('fb-val')) size = 20;
-        else if (el.classList.contains('sec-val-long')) size = 18;
-        else size = 18;
-
+    el.style.fontSize = size + 'px'; // 一旦リセット
+    
+    // はみ出している間、サイズを小さくする
+    while (el.scrollWidth > el.offsetWidth && size > 8) {
+        size--;
         el.style.fontSize = size + 'px';
-        while (el.scrollWidth > el.offsetWidth && size > 8) {
-            size--;
-            el.style.fontSize = size + 'px';
-        }
     }
+}
 
-    function updateIcon(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const img = document.getElementById('preview-icon');
-                const placeholder = document.getElementById('icon-placeholder');
-                if (img) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                }
-                if (placeholder) {
-                    placeholder.style.display = 'none';
-                }
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function selectChoice(groupId, index, btn) {
-        const btnGroup = btn.parentElement;
-        const allBtns = btnGroup.querySelectorAll('.c-btn');
-        allBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const prevRow = document.getElementById(groupId + '-prev');
-        if (prevRow) {
-            const opts = prevRow.querySelectorAll('.opt');
-            opts.forEach(o => o.classList.remove('circled'));
-            if (opts[index]) {
-                opts[index].classList.add('circled');
+function updateIcon(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById('preview-icon');
+            const placeholder = document.getElementById('icon-placeholder');
+            if (img) {
+                img.src = e.target.result;
+                img.style.display = 'block';
             }
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function selectChoice(groupId, index, btn) {
+    const btnGroup = btn.parentElement;
+    const allBtns = btnGroup.querySelectorAll('.c-btn');
+    allBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const prevRow = document.getElementById(groupId + '-prev');
+    if (prevRow) {
+        const opts = prevRow.querySelectorAll('.opt');
+        opts.forEach(o => o.classList.remove('circled'));
+        if (opts[index]) {
+            opts[index].classList.add('circled');
         }
     }
+}
 
-    let generatedBlobUrl = null;
+let generatedBlobUrl = null;
 
-    async function generateImage() {
-        const loading = document.getElementById('loading');
-        const loadingText = loading.querySelector('p');
-        if(loadingText) loadingText.innerText = "カキカキ中...";
-        loading.style.display = 'flex';
+async function generateImage() {
+    const loading = document.getElementById('loading');
+    const loadingText = loading.querySelector('p');
+    if(loadingText) loadingText.innerText = "カキカキ中…✍🏻";
+    loading.style.display = 'flex';
+    window.scrollTo(0, 0);
+
+    const sandbox = document.createElement('div');
+    sandbox.style.position = 'fixed';
+    sandbox.style.top = '0';
+    sandbox.style.left = '-9999px';
+    sandbox.style.width = '1400px';
+    sandbox.style.height = '1000px';
+    sandbox.style.overflow = 'hidden';
+    sandbox.style.zIndex = '-9999';
+    document.body.appendChild(sandbox);
+
+    const original = document.getElementById('prof-book');
+    const clone = original.cloneNode(true);
+    sandbox.appendChild(clone);
+
+    try {
+        await new Promise(r => setTimeout(r, 1500));
+
+        const canvas = await html2canvas(clone, {
+            scale: 1.5,
+            useCORS: true,
+            backgroundColor: null,
+            logging: false
+        });
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+        generatedBlobUrl = URL.createObjectURL(blob);
+
+        const resultImg = document.getElementById('generated-image');
+        resultImg.src = generatedBlobUrl;
+        resultImg.style.display = 'block';
+
+        loading.style.display = 'none';
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
         window.scrollTo(0, 0);
+        document.body.removeChild(sandbox);
 
-        const sandbox = document.createElement('div');
-        sandbox.style.position = 'fixed';
-        sandbox.style.top = '0';
-        sandbox.style.left = '-9999px';
-        sandbox.style.width = '1400px';
-        sandbox.style.height = '1000px';
-        sandbox.style.overflow = 'hidden';
-        sandbox.style.zIndex = '-9999';
-        document.body.appendChild(sandbox);
-
-        const original = document.getElementById('prof-book');
-        const clone = original.cloneNode(true);
-        sandbox.appendChild(clone);
-
-        try {
-            await new Promise(r => setTimeout(r, 1500));
-
-            const canvas = await html2canvas(clone, {
-                scale: 1.5,
-                useCORS: true,
-                backgroundColor: null,
-                logging: false
-            });
-
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
-            generatedBlobUrl = URL.createObjectURL(blob);
-
-            const resultImg = document.getElementById('generated-image');
-            resultImg.src = generatedBlobUrl;
-            resultImg.style.display = 'block';
-
-            loading.style.display = 'none';
-            document.getElementById('step1').classList.remove('active');
-            document.getElementById('step2').classList.add('active');
-            window.scrollTo(0, 0);
+    } catch (err) {
+        console.error(err);
+        alert('画像の作成に失敗しました');
+        loading.style.display = 'none';
+        if (document.body.contains(sandbox)) {
             document.body.removeChild(sandbox);
-
-        } catch (err) {
-            console.error(err);
-            alert('画像の作成に失敗しました');
-            loading.style.display = 'none';
-            if (document.body.contains(sandbox)) {
-                document.body.removeChild(sandbox);
-            }
         }
     }
+}
 
-    function saveImage() {
-        if (!generatedBlobUrl) {
-            alert('画像がまだできてないよ！');
-            return;
-        }
-        const link = document.createElement('a');
-        link.href = generatedBlobUrl;
-        link.download = `Heisei_Prof_${Date.now()}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+function saveImage() {
+    if (!generatedBlobUrl) {
+        alert('画像がまだできてないよ！');
+        return;
     }
+    const link = document.createElement('a');
+    link.href = generatedBlobUrl;
+    link.download = `Heisei_Prof_${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
-    function backToEdit() {
-        document.getElementById('step2').classList.remove('active');
-        document.getElementById('step1').classList.add('active');
-        setTimeout(resizePreview, 100);
-    }
+function backToEdit() {
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    setTimeout(resizePreview, 100);
+}
 </script>
 </body>
 </html>
