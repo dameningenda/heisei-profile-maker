@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>平成プロフ帳メーカー</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Potta+One&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</head>
-<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Potta+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <div class="app-container">
     <header class="pop-header">
@@ -36,22 +27,22 @@
                                 </div>
                                 
                                 <div class="intro-text-pop">
-                                    <div class="line-pop row-nowrap row-short-top">
-                                        <span class="fill-line sm" id="prev-me" data-ph="(一人称)"></span> の名前は <span class="fill-line name-wide" id="prev-name" data-ph="(ハンドルネーム)"></span> !
+                                    <div class="line-pop row-top-constrained">
+                                        <span class="fill-line sm auto-fit" id="prev-me" data-ph="(一人称)"></span> の名前は <span class="fill-line name-wide auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span> !
                                     </div>
-                                    <div class="line-pop row-short">
-                                        <span class="fill-line grow" id="prev-nick" data-ph="(あだ名)"></span> って呼んでね♡
+                                    <div class="line-pop row-top-constrained">
+                                        <span class="fill-line grow auto-fit" id="prev-nick" data-ph="(あだ名)"></span> って呼んでね♡
                                     </div>
                                     
                                     <div class="line-pop row-mid">
-                                        誕生日は<span class="fill-line xs" id="prev-month"></span>月<span class="fill-line xs" id="prev-day"></span>日なんだ！★
+                                        誕生日は<span class="fill-line xs auto-fit" id="prev-month">-</span>月<span class="fill-line xs auto-fit" id="prev-day">-</span>日なんだ！★
                                     </div>
 
                                     <div class="line-pop row-full mt-balance">
-                                        趣味は<span class="fill-line grow" id="prev-hobby" data-ph=""></span>で
+                                        趣味は<span class="fill-line grow auto-fit" id="prev-hobby" data-ph=""></span>で
                                     </div>
                                     <div class="line-pop row-full mt-2">
-                                        特技は<span class="fill-line grow" id="prev-skill" data-ph=""></span>だよ！
+                                        特技は<span class="fill-line grow auto-fit" id="prev-skill" data-ph=""></span>だよ！
                                     </div>
                                 </div>
                             </div>
@@ -59,18 +50,18 @@
                             <div class="favorite-section-grid">
                                 <div class="fav-title-pop">MY FAVORITE</div>
                                 <div class="fav-grid-container">
-                                    <div class="fav-box"><span class="fb-head">たべもの</span><div class="fb-val" id="prev-f-food"></div></div>
-                                    <div class="fav-box"><span class="fb-head">のみもの</span><div class="fb-val" id="prev-f-drink"></div></div>
-                                    <div class="fav-box"><span class="fb-head">えいが</span><div class="fb-val" id="prev-f-movie"></div></div>
-                                    <div class="fav-box"><span class="fb-head">おんがく</span><div class="fb-val" id="prev-f-music"></div></div>
-                                    <div class="fav-box"><span class="fb-head">スポーツ</span><div class="fb-val" id="prev-f-sport"></div></div>
-                                    <div class="fav-box"><span class="fb-head">ゲーム</span><div class="fb-val" id="prev-f-game"></div></div>
-                                    <div class="fav-box"><span class="fb-head">いろ</span><div class="fb-val" id="prev-f-color"></div></div>
-                                    <div class="fav-box"><span class="fb-head">ばしょ</span><div class="fb-val" id="prev-f-place"></div></div>
-                                    <div class="fav-box"><span class="fb-head">どうぶつ</span><div class="fb-val" id="prev-f-animal"></div></div>
-                                    <div class="fav-box"><span class="fb-head">ブランド</span><div class="fb-val" id="prev-f-fashion"></div></div>
-                                    <div class="fav-box"><span class="fb-head">ことば</span><div class="fb-val" id="prev-f-word"></div></div>
-                                    <div class="fav-box"><span class="fb-head">YouTuber</span><div class="fb-val" id="prev-f-tv"></div></div>
+                                    <div class="fav-box"><span class="fb-head">たべもの</span><div class="fb-val auto-fit" id="prev-f-food"></div></div>
+                                    <div class="fav-box"><span class="fb-head">のみもの</span><div class="fb-val auto-fit" id="prev-f-drink"></div></div>
+                                    <div class="fav-box"><span class="fb-head">えいが</span><div class="fb-val auto-fit" id="prev-f-movie"></div></div>
+                                    <div class="fav-box"><span class="fb-head">おんがく</span><div class="fb-val auto-fit" id="prev-f-music"></div></div>
+                                    <div class="fav-box"><span class="fb-head">スポーツ</span><div class="fb-val auto-fit" id="prev-f-sport"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ゲーム</span><div class="fb-val auto-fit" id="prev-f-game"></div></div>
+                                    <div class="fav-box"><span class="fb-head">いろ</span><div class="fb-val auto-fit" id="prev-f-color"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ばしょ</span><div class="fb-val auto-fit" id="prev-f-place"></div></div>
+                                    <div class="fav-box"><span class="fb-head">どうぶつ</span><div class="fb-val auto-fit" id="prev-f-animal"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ブランド</span><div class="fb-val auto-fit" id="prev-f-fashion"></div></div>
+                                    <div class="fav-box"><span class="fb-head">ことば</span><div class="fb-val auto-fit" id="prev-f-word"></div></div>
+                                    <div class="fav-box"><span class="fb-head">YouTuber</span><div class="fb-val auto-fit" id="prev-f-tv"></div></div>
                                 </div>
                             </div>
                         </div>
@@ -85,14 +76,14 @@
                                     <div class="note-paper">
                                         <div class="memo-title">Question</div>
                                         <div class="memo-lines-fitted">
-                                            <div class="nl"><span class="mq">今欲しいものは？</span><span class="ma" id="prev-q1"></span></div>
-                                            <div class="nl"><span class="mq">行ってみたい所？</span><span class="ma" id="prev-q2"></span></div>
-                                            <div class="nl"><span class="mq">マイブームは？</span><span class="ma" id="prev-q4"></span></div>
-                                            <div class="nl"><span class="mq">毎日欠かさない事？</span><span class="ma" id="prev-q5"></span></div>
-                                            <div class="nl"><span class="mq">宝くじ当たったら？</span><span class="ma" id="prev-q6"></span></div>
-                                            <div class="nl"><span class="mq">無人島に持つ物は？</span><span class="ma" id="prev-q7"></span></div>
-                                            <div class="nl"><span class="mq">いつか叶えたい夢？</span><span class="ma" id="prev-q8"></span></div>
-                                            <div class="nl"><span class="mq">明日地球が終わるなら？</span><span class="ma" id="prev-q9"></span></div>
+                                            <div class="nl"><span class="mq">今欲しいものは？</span><span class="na auto-fit" id="prev-q1"></span></div>
+                                            <div class="nl"><span class="mq">行ってみたい所？</span><span class="na auto-fit" id="prev-q2"></span></div>
+                                            <div class="nl"><span class="mq">マイブームは？</span><span class="na auto-fit" id="prev-q4"></span></div>
+                                            <div class="nl"><span class="mq">毎日欠かさない事？</span><span class="na auto-fit" id="prev-q5"></span></div>
+                                            <div class="nl"><span class="mq">宝くじ当たったら？</span><span class="na auto-fit" id="prev-q6"></span></div>
+                                            <div class="nl"><span class="mq">無人島に持つ物は？</span><span class="na auto-fit" id="prev-q7"></span></div>
+                                            <div class="nl"><span class="mq">いつか叶えたい夢？</span><span class="na auto-fit" id="prev-q8"></span></div>
+                                            <div class="nl"><span class="mq">明日地球が終わるなら？</span><span class="na auto-fit" id="prev-q9"></span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +94,7 @@
                                         <div class="choice-list-tight">
                                             <div class="cl-item" id="c1-prev"><div class="cq">きのこ派？たけのこ派？</div><div class="ca"><span class="opt">きのこ</span> or <span class="opt">たけのこ</span></div></div>
                                             <div class="cl-item" id="c2-prev"><div class="cq">インドア派？アウトドア派？</div><div class="ca"><span class="opt">インドア</span> or <span class="opt">アウトドア</span></div></div>
-                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去</span> or <span class="opt">未来予知</span></div></div>
+                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去に戻る</span> or <span class="opt">未来予知</span></div></div>
                                             <div class="cl-item" id="c4-prev"><div class="cq">好きな季節は？</div><div class="ca"><span class="opt">春</span> <span class="opt">夏</span> <span class="opt">秋</span> <span class="opt">冬</span></div></div>
                                         </div>
                                     </div>
@@ -111,8 +102,8 @@
                                         <div class="box-head-s">Secret Talk</div>
                                         <div class="sec-body-center">
                                             <div class="sec-row">ここだけの話、</div>
-                                            <div class="sec-row">実は <span class="sec-val-long" id="prev-secret"></span></div>
-                                            <div class="sec-row end-text">なんです…</div>
+                                            <div class="sec-row">実は <span class="sec-val-long auto-fit" id="prev-secret"></span></div>
+                                            <div class="sec-row end-text">です…</div>
                                         </div>
                                     </div>
                                 </div>
@@ -125,27 +116,27 @@
                                 </div>
                                 <div class="best-grid-pop">
                                     <div class="b-col">
-                                        <div class="b-theme" id="prev-rank1-title" data-ph="テーマ"></div>
+                                        <div class="b-theme auto-fit" id="prev-rank1-title" data-ph="テーマ"></div>
                                         <div class="b-list">
-                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val" id="prev-rank1-1"></span></div>
-                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val" id="prev-rank1-2"></span></div>
-                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val" id="prev-rank1-3"></span></div>
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank1-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank1-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank1-3"></span></div>
                                         </div>
                                     </div>
                                     <div class="b-col">
-                                        <div class="b-theme pink" id="prev-rank2-title" data-ph="テーマ"></div>
+                                        <div class="b-theme pink auto-fit" id="prev-rank2-title" data-ph="テーマ"></div>
                                         <div class="b-list">
-                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val" id="prev-rank2-1"></span></div>
-                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val" id="prev-rank2-2"></span></div>
-                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val" id="prev-rank2-3"></span></div>
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank2-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank2-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank2-3"></span></div>
                                         </div>
                                     </div>
                                     <div class="b-col">
-                                        <div class="b-theme purple" id="prev-rank3-title" data-ph="テーマ"></div>
+                                        <div class="b-theme purple auto-fit" id="prev-rank3-title" data-ph="テーマ"></div>
                                         <div class="b-list">
-                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val" id="prev-rank3-1"></span></div>
-                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val" id="prev-rank3-2"></span></div>
-                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val" id="prev-rank3-3"></span></div>
+                                            <div class="b-row"><span class="b-rank">1</span><span class="b-val auto-fit" id="prev-rank3-1"></span></div>
+                                            <div class="b-row"><span class="b-rank">2</span><span class="b-val auto-fit" id="prev-rank3-2"></span></div>
+                                            <div class="b-row"><span class="b-rank">3</span><span class="b-val auto-fit" id="prev-rank3-3"></span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -164,26 +155,45 @@
 
         <div class="form-container">
             <h3>✏️ 情報を入力してね</h3>
-            <div class="form-group date-input">
-                <label>DATE (日付)</label>
-                <input type="text" oninput="updateText('date', this.value)" placeholder="20XX / XX / XX">
-            </div>
-
+            
             <div class="form-section pink">
                 <h4>左ページ：MY PROFILE</h4>
-                <div class="form-group"><label>アイコン画像 (正方形)</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
+                <div class="form-group"><label>アイコン画像</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
                 
                 <div class="form-row">
                     <div class="half"><label>一人称</label><input type="text" oninput="updateText('me', this.value)" placeholder="わたし"></div>
-                    <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ひらがな推奨"></div>
+                    <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ハンドルネーム"></div>
                 </div>
-                <div class="form-group"><label>あだ名 (呼んでね！)</label><input type="text" oninput="updateText('nick', this.value)"></div>
+                <div class="form-group"><label>あだ名</label><input type="text" oninput="updateText('nick', this.value)"></div>
+                
                 <div class="form-row">
-                    <div class="half"><label>誕生月</label><input type="text" placeholder="1" oninput="updateText('month', this.value)"></div>
-                    <div class="half"><label>誕生日</label><input type="text" placeholder="1" oninput="updateText('day', this.value)"></div>
+                    <div class="half">
+                        <label>誕生月</label>
+                        <select id="input-month" onchange="updateBirthday()">
+                            <option value="">-</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="half">
+                        <label>誕生日</label>
+                        <select id="input-day" onchange="updateBirthday()">
+                            <option value="">-</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                            <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
+                            <option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group"><label>趣味 (長めOK)</label><input type="text" oninput="updateText('hobby', this.value)"></div>
-                <div class="form-group"><label>特技 (長めOK)</label><input type="text" oninput="updateText('skill', this.value)"></div>
+
+                <div class="form-group"><label>趣味</label><input type="text" oninput="updateText('hobby', this.value)"></div>
+                <div class="form-group"><label>特技</label><input type="text" oninput="updateText('skill', this.value)"></div>
 
                 <div class="form-label-qa">MY FAVORITE (12項目)</div>
                 <div class="form-row"><div class="half"><label>たべもの</label><input type="text" oninput="updateText('f-food', this.value)"></div><div class="half"><label>のみもの</label><input type="text" oninput="updateText('f-drink', this.value)"></div></div>
@@ -213,13 +223,13 @@
                     <p>インドア派orアウトドア派？</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c2', 0, this)">インドア</button><button class="c-btn" onclick="selectChoice('c2', 1, this)">アウトドア</button></div>
                     <p>欲しい力は？</p>
-                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去に戻る</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
                     <p>好きな季節は…</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c4', 0, this)">春</button><button class="c-btn" onclick="selectChoice('c4', 1, this)">夏</button><button class="c-btn" onclick="selectChoice('c4', 2, this)">秋</button><button class="c-btn" onclick="selectChoice('c4', 3, this)">冬</button></div>
                 </div>
 
                 <div class="form-label-qa">Secret Talk</div>
-                <div class="form-group"><label>実は「〇〇」なんです…</label><input type="text" oninput="updateText('secret', this.value)"></div>
+                <div class="form-group"><label>実は「〇〇」です</label><input type="text" oninput="updateText('secret', this.value)"></div>
 
                 <div class="form-label-qa">MY BEST (テーマも書いてね)</div>
                 <div class="form-group"><input type="text" class="rank-theme" placeholder="テーマ1 (例:おかし)" oninput="updateText('rank1-title', this.value)"></div>
@@ -255,5 +265,3 @@
         <p>カキカキ中...</p>
     </div>
 </div>
-
-<script src="script.js"></script>

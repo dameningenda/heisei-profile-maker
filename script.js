@@ -2,13 +2,6 @@ window.onload = function() {
     generateRings();
     resizePreview();
     
-    // 日付初期値
-    const today = new Date();
-    const dateStr = `${today.getFullYear()} / ${today.getMonth() + 1} / ${today.getDate()}`;
-    const dateInput = document.querySelector('.date-input input');
-    if(dateInput) dateInput.value = dateStr;
-    updateText('date', dateStr);
-
     updateText('rank1-title', 'MY BEST');
     updateText('rank2-title', 'MY BEST');
     updateText('rank3-title', 'MY BEST');
@@ -51,17 +44,27 @@ function updateText(id, val) {
     }
 }
 
+// 誕生日の更新
+function updateBirthday() {
+    const m = document.getElementById('input-month').value || '-';
+    const d = document.getElementById('input-day').value || '-';
+    updateText('month', m);
+    updateText('day', d);
+}
+
 // フォントサイズ自動調整関数
 function adjustFontSize(el) {
     let size = 32; // 最大サイズ
     if (el.classList.contains('name-wide')) size = 32;
     else if (el.classList.contains('fill-line')) size = 22;
     else if (el.classList.contains('fb-val')) size = 20;
+    else if (el.classList.contains('sec-val-long')) size = 18;
     else size = 18;
 
     el.style.fontSize = size + 'px'; // 一旦リセット
     
-    // はみ出している間、サイズを小さくする
+    // 文字がはみ出している間、フォントサイズを小さくする
+    // scrollWidth > offsetWidth で判定 (CSSでoverflow:hiddenしているので判定可能)
     while (el.scrollWidth > el.offsetWidth && size > 8) {
         size--;
         el.style.fontSize = size + 'px';
