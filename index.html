@@ -42,13 +42,13 @@
         .preview-wrapper { background: #eee; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
         .preview-stage { width: 100%; position: relative; overflow: hidden; }
 
-        /* === 本体 (サイズ完全固定) === */
+        /* === 本体 (1400x1000 固定) === */
         #capture-area { width: 1400px; height: 1000px; transform-origin: top left; background: #fff; }
         #prof-book { width: 1400px; height: 1000px; display: flex; position: relative; overflow: hidden; }
 
         .page-left, .page-right { flex: 1; padding: 30px; position: relative; display: flex; flex-direction: column; gap: 15px; height: 1000px; }
 
-        /* --- 左ページ --- */
+        /* --- 左ページ (ピンク) --- */
         .page-left {
             background-color: var(--bg-pink-pop);
             border-right: 2px solid #ccc;
@@ -58,9 +58,9 @@
         .header-decoration { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; height: 50px; }
         .header-title { font-family: var(--font-title); font-size: 48px; color: #fff; text-shadow: 3px 3px 0 var(--pop-pink), 5px 5px 0 #fff; -webkit-text-stroke: 2px #fff; letter-spacing: 2px; }
 
-        /* 1. プロフィール (サイズ固定・レイアウト崩れ防止) */
+        /* 1. プロフィール (サイズ固定・バランス調整) */
         .profile-sheet-pop {
-            height: 420px; /* 固定 */
+            height: 420px; /* 高さ固定 */
             background: #fff; border-radius: 30px;
             padding: 25px; position: relative; border: 5px solid var(--pop-pink);
             box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
@@ -68,7 +68,7 @@
         }
         /* 写真枠 */
         .photo-box-pop {
-            position: absolute; top: 60px; right: 25px;
+            position: absolute; top: 50px; right: 25px;
             width: 160px; height: 160px; background: #f9f9f9;
             border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
             display: flex; align-items: center; justify-content: center; z-index: 2;
@@ -76,60 +76,52 @@
         .photo-box-pop img { width: 100%; height: 100%; object-fit: cover; }
         #icon-placeholder { color: #ccc; font-size: 24px; font-family: var(--font-title); }
 
-        /* 行間のバランス調整（均等配置） */
+        /* 全体のバランスを整えるための余白設定 */
         .intro-text-pop { 
             display: flex; flex-direction: column; 
+            justify-content: center; /* 垂直中央配置 */
             height: 100%; 
-            padding-top: 10px;
-            justify-content: flex-start; /* 上から詰める */
-            gap: 20px; /* 行間を適度に空ける */
+            padding-top: 0;
+            gap: 15px; /* 行間を均等に */
         }
-        
-        /* 行コンテナ */
-        .line-pop { 
-            display: flex; align-items: baseline; 
-            white-space: nowrap; width: 100%; 
-            box-sizing: border-box;
-        }
+        .line-pop { display: flex; align-items: baseline; white-space: nowrap; width: 100%; box-sizing: border-box; }
+        .row-nowrap { flex-wrap: nowrap; }
 
-        /* 1,2行目: 写真枠を避ける幅指定 */
-        .row-short { width: 420px; } 
+        /* 行のレイアウト制御 (写真被り防止) */
+        /* 幅を360pxに制限して写真と重ならないようにする */
+        .row-short-top { width: 360px; overflow: hidden; } 
+        .row-short { width: 360px; overflow: hidden; }
         
-        /* 誕生日と趣味の間の隙間調整 */
-        /* gapで制御しているので個別のmarginは削除して整列 */
-        
-        /* 趣味・特技: 全幅 */
-        .row-full { width: 100%; }
+        .row-mid { overflow: hidden; margin-bottom: 5px; } /* 誕生日 */
+        .mt-balance { margin-top: 10px; } /* 趣味行の微調整 */
+        .row-full { width: 100%; overflow: hidden; }
 
-        /* 入力欄（★重要：文字数超過対策） */
+        /* 入力欄（鉄壁の崩れ防止） */
         .fill-line {
-            border-bottom: 3px solid var(--text-color); 
-            padding: 0 5px; margin: 0 3px;
-            text-align: center; color: var(--text-color); 
-            display: inline-block; /* 幅制限のために必須 */
+            border-bottom: 3px solid var(--text-color); padding: 0 5px; margin: 0 3px;
+            text-align: center; color: var(--text-color); display: inline-block;
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden; 
             vertical-align: bottom;
-            height: 36px; line-height: 36px;
-            
-            /* 文字があふれたときの処理 */
-            white-space: nowrap; 
-            overflow: visible; /* スケール変換で見えるようにする */
+            height: 35px; line-height: 35px;
         }
-        /* 縮小表示用のラッパー */
+        /* スケーリング用のラッパー */
         .text-scaler {
             display: inline-block;
             white-space: nowrap;
             transform-origin: center bottom; /* 下中央基準で縮小 */
         }
-
         .fill-line:empty::before {
             content: attr(data-ph); color: #ddd; font-size: 18px; pointer-events: none;
         }
 
-        /* 各欄の固定幅（これ以上広がらない） */
-        .fill-line.name-wide { width: 220px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; }
-        .fill-line.grow { flex: 1; text-align: center; } /* Flexで残りの幅を埋める */
-        .fill-line.sm { width: 100px; }
-        .fill-line.xs { width: 60px; }
+        /* 各パーツの「最大幅」を厳密に指定 */
+        .fill-line.name-wide { width: 200px; max-width: 200px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; }
+        .fill-line.long-text { flex: 1; text-align: left; max-width: 100%; }
+        .fill-line.grow { flex: 1; text-align: center; width: auto; max-width: 100%; } 
+        .fill-line.sm { width: 80px; max-width: 80px; }
+        .fill-line.xs { width: 50px; max-width: 50px; }
 
         /* 2. MY FAVORITE */
         .favorite-section-grid {
@@ -152,11 +144,11 @@
         }
         .fb-val {
             width: 90%; border-bottom: none; text-align: center; font-size: 20px;
-            margin-top: 15px; white-space: nowrap; 
+            margin-top: 15px; white-space: nowrap; overflow: hidden;
         }
         .fb-val .text-scaler { transform-origin: center; }
 
-        /* --- 右ページ --- */
+        /* --- 右ページ (水色) --- */
         .page-right {
             background-color: var(--bg-blue-pop);
             border-left: 2px solid #ccc;
@@ -166,15 +158,15 @@
         /* 上段 */
         .right-top-section { display: flex; gap: 15px; height: 420px; margin-bottom: 15px; overflow: hidden; }
 
-        /* Question (罫線ズレ修正) */
+        /* Question (罫線調整修正) */
         .question-memo-fitted {
             flex: 1.4; background: #fff; border-radius: 5px; border: 2px solid #aaa;
             padding: 15px 10px 10px 30px; position: relative;
-            /* 罫線: 下から2pxの位置に線を引く */
+            /* 罫線: 38px透明 + 2px線 */
             background-image: linear-gradient(to bottom, transparent 38px, #eee 2px); 
             background-size: 100% 40px; 
-            /* 開始位置調整 */
-            background-position: 0 10px;
+            /* 背景位置調整: 文字の下に線が来るように */
+            background-position: 0 5px;
             overflow: hidden;
         }
         .note-ring-holes {
@@ -183,16 +175,14 @@
         }
         .memo-title { font-family: var(--font-title); font-size: 28px; color: #ccc; margin-top: -10px; text-shadow: 1px 1px 0 #fff; -webkit-text-stroke: 1px #fff; background: rgba(255,255,255,0.9); display: inline-block; padding-right: 10px; }
 
-        .memo-lines-fitted { 
-            margin-top: 15px; height: 320px; /* 高さ固定 */
-            display: flex; flex-direction: column; justify-content: flex-start; /* 上から順に */
+        .memo-lines-balanced { 
+            margin-top: 10px; height: 90%; 
+            display: flex; flex-direction: column; justify-content: space-around; 
         }
-        /* 行設定：罫線と高さを完全一致させる */
+        /* 文字を下揃えにして、罫線の上に乗せる */
         .nl { 
-            height: 40px; 
-            display: flex; align-items: flex-end; /* 下揃えで線に乗せる */
-            padding-bottom: 2px; /* 微調整 */
-            box-sizing: border-box;
+            height: 40px; display: flex; align-items: flex-end; 
+            padding-bottom: 3px; 
             overflow: hidden; 
         }
         .nq { font-size: 14px; color: #555; white-space: nowrap; margin-right: 5px; flex-shrink: 0; }
@@ -234,7 +224,8 @@
         .sec-val-long { border-bottom: 2px dashed #888; width: 80%; display: inline-block; text-align: center; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; margin: 0 auto; }
         .sec-end { 
             display: block; width: 100%; 
-            text-align: right; /* 明示的に右寄せ */
+            text-align: right; /* 右寄せ */
+            align-self: flex-end; /* Flex内での右寄せ */
             font-size: 15px; color: #555; 
         }
 
@@ -341,7 +332,7 @@
                                 </div>
                                 
                                 <div class="intro-text-pop">
-                                    <div class="line-pop row-short">
+                                    <div class="line-pop row-nowrap row-short-top">
                                         <span class="fill-line sm"><span class="text-scaler auto-fit" id="prev-me" data-ph="(一人称)"></span></span> の名前は <span class="fill-line name-wide"><span class="text-scaler auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span></span> !
                                     </div>
                                     <div class="line-pop row-short">
@@ -389,7 +380,7 @@
                                     <div class="note-ring-holes"></div>
                                     <div class="note-paper">
                                         <div class="memo-title">Question</div>
-                                        <div class="memo-lines-fitted">
+                                        <div class="memo-lines-balanced">
                                             <div class="nl"><span class="mq">今欲しいものは？</span><span class="na"><span class="text-scaler auto-fit" id="prev-q1"></span></span></div>
                                             <div class="nl"><span class="mq">行ってみたい所？</span><span class="na"><span class="text-scaler auto-fit" id="prev-q2"></span></span></div>
                                             <div class="nl"><span class="mq">マイブームは？</span><span class="na"><span class="text-scaler auto-fit" id="prev-q4"></span></span></div>
@@ -482,7 +473,7 @@
                     <div class="half"><label>一人称</label><input type="text" oninput="updateText('me', this.value)" placeholder="わたし"></div>
                     <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ハンドルネーム"></div>
                 </div>
-                <div class="form-group"><label>あだ名</label><input type="text" oninput="updateText('nick', this.value)"></div>
+                <div class="form-group"><label>あだ名 (呼んでね！)</label><input type="text" oninput="updateText('nick', this.value)"></div>
                 
                 <div class="form-row">
                     <div class="half">
@@ -615,7 +606,7 @@ function updateText(id, val) {
     const el = document.getElementById('prev-' + id);
     if (el) {
         el.innerText = val;
-        // 文字入力のたびにスケーリング実行
+        // 入力時に自動縮小チェック
         if (el.classList.contains('auto-fit')) {
             adjustTextScale(el);
         }
