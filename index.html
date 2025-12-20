@@ -59,7 +59,7 @@
         .header-decoration { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; height: 50px; }
         .header-title { font-family: var(--font-title); font-size: 48px; color: #fff; text-shadow: 3px 3px 0 var(--pop-pink), 5px 5px 0 #fff; -webkit-text-stroke: 2px #fff; letter-spacing: 2px; }
 
-        /* 1. プロフィール (サイズ固定・バランス調整) */
+        /* 1. プロフィール (レイアウト崩れ防止・均等配置) */
         .profile-sheet-pop {
             height: 420px; /* 高さ固定 */
             background: #fff; border-radius: 30px;
@@ -77,39 +77,43 @@
         .photo-box-pop img { width: 100%; height: 100%; object-fit: cover; }
         #icon-placeholder { color: #ccc; font-size: 24px; font-family: var(--font-title); }
 
-        /* 全体のバランスを整えるための余白設定 */
+        /* 全体のバランスを整えるための設定 (均等配置) */
         .intro-text-pop { 
             display: flex; flex-direction: column; 
-            justify-content: flex-start;
+            justify-content: space-evenly; /* 均等に配置 */
             height: 100%; 
-            padding-top: 20px;
-            gap: 25px; 
+            padding-top: 10px; padding-bottom: 10px;
         }
-        .line-pop { display: flex; align-items: baseline; white-space: nowrap; width: 100%; box-sizing: border-box; }
+        .line-pop { 
+            display: flex; align-items: baseline; 
+            white-space: nowrap; width: 100%; box-sizing: border-box; 
+        }
         .row-nowrap { flex-wrap: nowrap; }
 
-        /* 行のレイアウト制御 (幅固定) */
-        .row-short-top { width: 420px; overflow: hidden; } 
-        .row-short { width: 420px; overflow: hidden; }
-        .row-mid { overflow: hidden; }
-        .mt-balance { margin-top: 30px; } 
+        /* 行のレイアウト制御 (幅固定で写真被り回避) */
+        /* 写真の横に来る行は幅を制限 */
+        .row-short { width: 360px; overflow: hidden; }
+        
+        /* 写真の下に来る行は全幅 */
         .row-full { width: 100%; overflow: hidden; }
 
         /* 入力欄（鉄壁の崩れ防止） */
         .fill-line {
-            border-bottom: 3px solid var(--text-color); padding: 0 5px; margin: 0 3px;
-            text-align: center; color: var(--text-color); display: inline-block;
+            border-bottom: 3px solid var(--text-color); 
+            padding: 0 5px; margin: 0 3px;
+            text-align: center; color: var(--text-color); 
+            display: inline-block;
             position: relative;
             white-space: nowrap;
             overflow: hidden; 
             vertical-align: bottom;
-            height: 35px; line-height: 35px;
+            height: 36px; line-height: 36px; /* 高さ固定 */
         }
-        /* スケーリング用のラッパー */
+        /* スケーリング用のラッパー (これにtransformをかける) */
         .text-scaler {
             display: inline-block;
             white-space: nowrap;
-            transform-origin: center bottom;
+            transform-origin: center bottom; /* 下中央基準で縮小 */
         }
         /* JSで空の時は中身を消すので、これでプレースホルダーが出る */
         .fill-line:empty::before {
@@ -117,13 +121,13 @@
         }
 
         /* 各パーツの「最大幅」を厳密に指定 */
-        .fill-line.name-wide { width: 220px; max-width: 220px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; }
-        .fill-line.long-text { flex: 1; text-align: left; max-width: 100%; }
+        .fill-line.name-wide { width: 200px; max-width: 200px; font-size: 32px; font-weight: bold; border-bottom-width: 4px; }
+        /* growクラスでも幅制限をつける */
         .fill-line.grow { flex: 1; text-align: center; width: auto; max-width: 100%; } 
-        .fill-line.sm { width: 100px; max-width: 100px; }
-        .fill-line.xs { width: 60px; max-width: 60px; }
+        .fill-line.sm { width: 80px; max-width: 80px; }
+        .fill-line.xs { width: 50px; max-width: 50px; }
 
-        /* 2. MY FAVORITE (間隔調整して12個収める) */
+        /* 2. MY FAVORITE */
         .favorite-section-grid {
             height: 400px; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 15px;
             border: 4px dashed var(--pop-cyan); display: flex; flex-direction: column; overflow: hidden;
@@ -131,9 +135,9 @@
         .fav-title-pop { text-align: center; font-family: var(--font-title); font-size: 30px; color: var(--pop-cyan); text-shadow: 2px 2px 0 #fff; -webkit-text-stroke: 1px #fff; margin-bottom: 5px; }
         .fav-grid-container {
             flex: 1; display: grid; grid-template-columns: 1fr 1fr; 
-            gap: 10px; /* 15pxから10pxに縮小して収める */
+            gap: 10px; 
         }
-        .fav-col { display: flex; flex-direction: column; gap: 8px; /* 10pxから8pxに縮小 */ justify-content: space-between; }
+        .fav-col { display: flex; flex-direction: column; gap: 8px; justify-content: space-between; }
         .fav-box {
             flex: 1; background: #fff; border: 3px solid var(--pop-pink); border-radius: 10px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -166,8 +170,8 @@
             /* 罫線: 38px透明 + 2px線 */
             background-image: linear-gradient(to bottom, transparent 38px, #eee 2px); 
             background-size: 100% 40px; 
-            /* 位置調整：文字の下に線が来るように */
-            background-position: 0 0;
+            /* 位置調整：文字の下に線が来るようにピクセル調整 */
+            background-position: 0 4px;
             overflow: hidden;
         }
         .note-ring-holes {
@@ -183,7 +187,7 @@
         /* 文字を下揃えにして、罫線の上に乗せる */
         .nl { 
             height: 40px; display: flex; align-items: flex-end; 
-            padding-bottom: 3px; 
+            padding-bottom: 4px; /* ここで微調整 */
             overflow: hidden; 
         }
         .nq { font-size: 14px; color: #555; white-space: nowrap; margin-right: 5px; flex-shrink: 0; }
@@ -223,9 +227,11 @@
         }
         .sec-row { margin-bottom: 0; }
         .sec-val-long { border-bottom: 2px dashed #888; width: 80%; display: inline-block; text-align: center; font-size: 18px; font-weight: bold; white-space: nowrap; overflow: hidden; margin: 0 auto; }
+        
+        /* 右寄せ用クラス */
         .sec-end { 
             display: block; width: 100%; 
-            text-align: right; /* 右寄せ */
+            text-align: right; 
             font-size: 15px; color: #555; 
         }
 
@@ -332,22 +338,22 @@
                                 </div>
                                 
                                 <div class="intro-text-pop">
-                                    <div class="line-pop row-nowrap row-short-top">
-                                        <span class="fill-line sm auto-fit" id="prev-me" data-ph="(一人称)"></span> の名前は <span class="fill-line name-wide auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span> !
+                                    <div class="line-pop row-short">
+                                        <span class="fill-line sm"><span class="text-scaler auto-fit" id="prev-me" data-ph="(一人称)"></span></span> の名前は <span class="fill-line name-wide"><span class="text-scaler auto-fit" id="prev-name" data-ph="(ハンドルネーム)"></span></span> !
                                     </div>
                                     <div class="line-pop row-short">
-                                        <span class="fill-line grow auto-fit" id="prev-nick" data-ph="(あだ名)"></span> って呼んでね♡
+                                        <span class="fill-line grow"><span class="text-scaler auto-fit" id="prev-nick" data-ph="(あだ名)"></span></span> って呼んでね♡
                                     </div>
                                     
-                                    <div class="line-pop row-mid">
-                                        誕生日は<span class="fill-line xs auto-fit" id="prev-month">-</span>月<span class="fill-line xs auto-fit" id="prev-day">-</span>日なんだ！★
+                                    <div class="line-pop row-short">
+                                        誕生日は<span class="fill-line xs"><span class="text-scaler auto-fit" id="prev-month">-</span></span>月<span class="fill-line xs"><span class="text-scaler auto-fit" id="prev-day">-</span></span>日なんだ！★
                                     </div>
 
-                                    <div class="line-pop row-full mt-balance">
-                                        趣味は<span class="fill-line grow auto-fit" id="prev-hobby" data-ph=""></span>で
+                                    <div class="line-pop row-full">
+                                        趣味は<span class="fill-line grow"><span class="text-scaler auto-fit" id="prev-hobby" data-ph=""></span></span>で
                                     </div>
-                                    <div class="line-pop row-full mt-2">
-                                        特技は<span class="fill-line grow auto-fit" id="prev-skill" data-ph=""></span>だよ！
+                                    <div class="line-pop row-full">
+                                        特技は<span class="fill-line grow"><span class="text-scaler auto-fit" id="prev-skill" data-ph=""></span></span>だよ！
                                     </div>
                                 </div>
                             </div>
@@ -399,7 +405,7 @@
                                         <div class="choice-list-tight">
                                             <div class="cl-item" id="c1-prev"><div class="cq">きのこ派？たけのこ派？</div><div class="ca"><span class="opt">きのこ</span> or <span class="opt">たけのこ</span></div></div>
                                             <div class="cl-item" id="c2-prev"><div class="cq">インドア派？アウトドア派？</div><div class="ca"><span class="opt">インドア</span> or <span class="opt">アウトドア</span></div></div>
-                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去</span> or <span class="opt">未来予知</span></div></div>
+                                            <div class="cl-item" id="c3-prev"><div class="cq">欲しい力はどっち？</div><div class="ca"><span class="opt">過去に戻る力</span> or <span class="opt">未来予知</span></div></div>
                                             <div class="cl-item" id="c4-prev"><div class="cq">好きな季節は？</div><div class="ca"><span class="opt">春</span> <span class="opt">夏</span> <span class="opt">秋</span> <span class="opt">冬</span></div></div>
                                         </div>
                                     </div>
@@ -408,7 +414,7 @@
                                         <div class="sec-body-center">
                                             <div class="sec-row">ここだけの話、</div>
                                             <div class="sec-row">実は <span class="sec-val-long"><span class="text-scaler auto-fit" id="prev-secret"></span></span></div>
-                                            <div class="sec-end">です…</div>
+                                            <div class="sec-row sec-end">です…</div>
                                         </div>
                                     </div>
                                 </div>
@@ -460,7 +466,11 @@
 
         <div class="form-container">
             <h3>✏️ 情報を入力してね</h3>
-            
+            <div class="form-group date-input">
+                <label>DATE (日付)</label>
+                <input type="text" oninput="updateText('date', this.value)" placeholder="20XX / XX / XX">
+            </div>
+
             <div class="form-section pink">
                 <h4>左ページ：MY PROFILE</h4>
                 <div class="form-group"><label>アイコン画像</label><input type="file" accept="image/*" onchange="updateIcon(this)"></div>
@@ -469,7 +479,7 @@
                     <div class="half"><label>一人称</label><input type="text" oninput="updateText('me', this.value)" placeholder="わたし・ぼく等"></div>
                     <div class="half"><label>名前 (ハンドルネーム)</label><input type="text" oninput="updateText('name', this.value)" placeholder="ハンドルネーム"></div>
                 </div>
-                <div class="form-group"><label>あだ名</label><input type="text" oninput="updateText('nick', this.value)" placeholder="呼んでね！"></div>
+                <div class="form-group"><label>あだ名 (呼んでね！)</label><input type="text" oninput="updateText('nick', this.value)"></div>
                 
                 <div class="form-row">
                     <div class="half">
@@ -504,12 +514,12 @@
                 <h4>右ページ：Q&A / BEST3</h4>
                 <div class="form-label-qa">Question</div>
                 <div class="form-group"><label>今欲しいものは？</label><input type="text" oninput="updateText('q1', this.value)"></div>
-                <div class="form-group"><label>行ってみたい所？</label><input type="text" oninput="updateText('q2', this.value)"></div>
+                <div class="form-group"><label>行ってみたい所は？</label><input type="text" oninput="updateText('q2', this.value)"></div>
                 <div class="form-group"><label>マイブームは？</label><input type="text" oninput="updateText('q4', this.value)"></div>
-                <div class="form-group"><label>毎日欠かさない事？</label><input type="text" oninput="updateText('q5', this.value)"></div>
-                <div class="form-group"><label>宝くじ当たったら？</label><input type="text" oninput="updateText('q6', this.value)"></div>
-                <div class="form-group"><label>無人島に持つ物は？</label><input type="text" oninput="updateText('q7', this.value)"></div>
-                <div class="form-group"><label>いつか叶えたい夢？</label><input type="text" oninput="updateText('q8', this.value)"></div>
+                <div class="form-group"><label>毎日欠かさないことは？</label><input type="text" oninput="updateText('q5', this.value)"></div>
+                <div class="form-group"><label>宝くじが当たったらどうする？</label><input type="text" oninput="updateText('q6', this.value)"></div>
+                <div class="form-group"><label>無人島に何を持っていく？</label><input type="text" oninput="updateText('q7', this.value)"></div>
+                <div class="form-group"><label>いつか叶えたい夢はある？</label><input type="text" oninput="updateText('q8', this.value)"></div>
                 <div class="form-group"><label>明日地球が終わるなら？</label><input type="text" oninput="updateText('q9', this.value)"></div>
 
                 <div class="form-label-qa">Choices</div>
@@ -519,7 +529,7 @@
                     <p>インドア派orアウトドア派？</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c2', 0, this)">インドア</button><button class="c-btn" onclick="selectChoice('c2', 1, this)">アウトドア</button></div>
                     <p>欲しい力はどっち？</p>
-                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
+                    <div class="c-btns"><button class="c-btn" onclick="selectChoice('c3', 0, this)">過去に戻る力</button><button class="c-btn" onclick="selectChoice('c3', 1, this)">未来予知</button></div>
                     <p>好きな季節は？</p>
                     <div class="c-btns"><button class="c-btn" onclick="selectChoice('c4', 0, this)">春</button><button class="c-btn" onclick="selectChoice('c4', 1, this)">夏</button><button class="c-btn" onclick="selectChoice('c4', 2, this)">秋</button><button class="c-btn" onclick="selectChoice('c4', 3, this)">冬</button></div>
                 </div>
@@ -566,6 +576,7 @@
 window.onload = function() {
     generateRings();
     resizePreview();
+    
     updateText('rank1-title', 'MY BEST');
     updateText('rank2-title', 'MY BEST');
     updateText('rank3-title', 'MY BEST');
