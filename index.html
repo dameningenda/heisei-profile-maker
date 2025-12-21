@@ -49,7 +49,7 @@
 
         .page-left, .page-right { flex: 1; padding: 30px; position: relative; display: flex; flex-direction: column; gap: 15px; height: 1000px; }
 
-        /* --- 左ページ (ピンク) - 聖域：変更なし --- */
+        /* --- 左ページ (聖域：固定) --- */
         .page-left {
             background-color: var(--bg-pink-pop);
             border-right: 2px solid #ccc;
@@ -73,7 +73,16 @@
 
         .intro-text-pop { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; min-width: 0; }
         .photo-area-wrapper { width: 170px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-        .photo-box-pop { width: 160px; height: 160px; background: #f9f9f9; border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; transform: rotate(3deg); overflow: hidden; }
+        
+        .photo-box-pop { 
+            width: 160px; height: 160px; 
+            background: #f9f9f9; 
+            border: 4px solid var(--pop-cyan); 
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.1); 
+            display: flex; align-items: center; justify-content: center; 
+            transform: rotate(3deg); 
+            overflow: hidden; 
+        }
         .photo-box-pop img { width: 100%; height: 100%; object-fit: cover; }
         #icon-placeholder { color: #ccc; font-size: 24px; font-family: var(--font-title); }
         .line-pop { display: flex; align-items: flex-end; width: 100%; box-sizing: border-box; overflow: hidden; }
@@ -91,7 +100,21 @@
         .fav-grid-container { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(6, 1fr); gap: 10px; height: 100%; overflow: hidden; }
         .fav-box { width: 100%; height: 100%; background: #fff; border: 3px solid var(--pop-pink); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 2px 2px 0 rgba(0,0,0,0.05); position: relative; overflow: hidden; }
         .fb-head { position: absolute; top: 2px; left: 5px; font-size: 14px; font-weight: bold; color: var(--pop-pink); background: #fff; padding: 0 5px; border-radius: 5px; z-index: 2; }
-        .fb-val { width: 90%; border-bottom: none; text-align: center; margin-top: 15px; white-space: normal; word-break: break-all; overflow: hidden; max-width: 100%; display: flex; align-items: center; justify-content: center; line-height: 1.1; height: 100%; font-size: 20px; }
+        
+        /* MY FAVORITE (聖域：固定) */
+        .fb-val { 
+            width: 100%; border-bottom: none; text-align: center; 
+            margin: 0;
+            padding-top: 28px; 
+            padding-bottom: 2px;
+            white-space: normal; word-break: break-all; 
+            overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100%; 
+            box-sizing: border-box; 
+            font-size: 20px; 
+            line-height: 1.0;
+        }
         .fb-val .text-scaler { transform-origin: center; }
 
         /* --- 右ページ (水色) --- */
@@ -104,7 +127,7 @@
         /* 上段 */
         .right-top-section { display: flex; gap: 15px; height: 420px; margin-bottom: 15px; overflow: hidden; }
 
-        /* Questionエリア (聖域：変更なし) */
+        /* Questionエリア (聖域：固定) */
         .question-memo-fitted {
             flex: 1.4; background: #fff; border-radius: 5px; border: 2px solid #aaa;
             padding: 15px 10px 10px 30px; position: relative;
@@ -121,79 +144,83 @@
             display: flex; flex-direction: column; justify-content: space-evenly; 
         }
         .nl { height: 45px; display: flex; align-items: center; padding-bottom: 2px; border-bottom: 1px solid #ccc; overflow: hidden; width: 100%; }
-        .nq { font-size: 13px; color: #aaa; white-space: nowrap; margin-right: 5px; flex-shrink: 0; padding-bottom: 4px; }
+        .nq { font-size: 13px; color: #aaa; white-space: nowrap; margin-right: 5px; flex-shrink: 0; }
         .na { flex: 1; width: auto; min-width: 0; font-weight: bold; color: #222; border-bottom: none; white-space: normal; word-break: break-all; overflow: hidden; display: flex; align-items: center; line-height: 1.0; height: 100%; font-size: 26px; }
 
         /* 右カラム */
         .right-col-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
 
-        /* Choices */
+        /* Choices (聖域：固定) */
         .choices-box-pop {
             flex: 2; background: #fff; border-radius: 10px; padding: 5px 15px;
             border: 4px solid var(--pop-cyan); box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
             display: flex; flex-direction: column; justify-content: center; overflow: hidden;
         }
         .box-head { font-family: var(--font-title); font-size: 22px; color: var(--pop-cyan); text-align: center; -webkit-text-stroke: 1px #fff; margin-bottom: 5px; }
-        .choice-list-tight {
-            display: flex; flex-direction: column; justify-content: space-around; 
-            flex: 1; padding-bottom: 5px;
-        }
+        .choice-list-tight { display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding-bottom: 5px; }
         .cl-item { margin-bottom: 2px; font-size: 12px; text-align: center; }
         .cq { font-size: 11px; color: #888; display: block; }
         .ca { font-weight: bold; font-size: 15px; white-space: nowrap; }
         .opt { padding: 0 4px; border-radius: 50%; }
         .opt.circled { border: 3px solid var(--pop-pink); color: var(--pop-pink); display: inline-block; font-weight: 900; transform: rotate(0deg); }
 
-        /* Secret Talk (★修正：レイアウト崩れ・見切れ防止) */
+        /* Secret Talk (★修正：3段完全分離・高さ固定構造) */
         .secret-box-pop {
-            height: 160px; /* 固定 */
-            background: #fff; border-radius: 10px; padding: 10px;
+            height: 160px; background: #fff; border-radius: 10px; padding: 10px;
             border: 4px solid var(--pop-pink); position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
             display: flex; flex-direction: column; 
             overflow: hidden;
         }
         .box-head-s { font-family: var(--font-title); font-size: 20px; color: var(--pop-pink); text-align: center; flex-shrink: 0; }
         
-        /* 中身を上下に広げる */
-        .sec-body-center { 
+        /* 中身の配置エリア */
+        .sec-body-fixed { 
             flex: 1; 
-            display: flex; flex-direction: column; justify-content: center; 
-            gap: 2px;
-            min-height: 0; /* 縮小許可 */
+            display: flex; flex-direction: column; 
+            justify-content: space-between; /* 上下を端に寄せる */
             overflow: hidden; 
+            padding: 5px 0;
         }
         
-        /* 前後の定型文は絶対に縮ませない */
-        .sec-row.fixed { 
-            flex-shrink: 0; 
-            font-size: 15px; color: #555; 
-        }
-        
-        .sec-end { text-align: right; }
+        /* 上：固定 */
+        .sec-line-top { font-size: 15px; color: #555; flex-shrink: 0; }
 
-        /* 入力部分は伸縮可能に */
-        .sec-input-area {
-            flex: 1; /* 余ったスペースを全部使う */
-            display: flex; align-items: center; justify-content: center;
-            min-height: 0; /* 縮小許可 */
-            overflow: hidden;
+        /* 中：可変エリア（入力欄） */
+        .sec-line-middle {
+            flex: 1; /* 余った高さを独占 */
+            display: flex; 
+            align-items: flex-end; /* 線は下揃え */
+            overflow: hidden; /* はみ出し禁止 */
             width: 100%;
+            margin: 5px 0;
+            min-height: 0; /* 縮小許可 */
         }
-
+        
+        .sec-label { white-space: nowrap; margin-right: 5px; font-size: 15px; color: #555; padding-bottom: 2px; }
+        
+        /* 入力文字 */
         .sec-val-long { 
+            flex: 1; 
             border-bottom: 2px dashed #888; 
-            width: 100%; 
-            display: block; text-align: center; font-weight: bold; margin: 0 auto;
+            /* 初期状態でも線の高さを確保 */
+            min-height: 32px;
+            text-align: center; font-weight: bold; 
             white-space: normal; word-break: break-all; overflow: hidden;
             line-height: 1.0; 
-            /* 親(sec-input-area)の高さいっぱいに */
-            max-height: 100%; 
             font-size: 24px; 
-            /* 上下中央寄せ */
-            display: flex; align-items: center; justify-content: center;
+            /* 親（.sec-line-middle）の高さを絶対に超えない＝はみ出したら縮む */
+            max-height: 100%; 
+            display: block; /* 高さを正確に判定させる */
         }
 
-        /* 中段：MY BEST (★修正：タイトル2行・サイズ調整) */
+        /* 下：固定 */
+        .sec-line-bottom { 
+            flex-shrink: 0; 
+            text-align: right; 
+            font-size: 15px; color: #555;
+        }
+
+        /* 中段：MY BEST (聖域：固定) */
         .best-section-pop {
             height: 250px; background: #fff; border-radius: 15px; padding: 10px;
             border: 4px solid var(--pop-yellow); margin-bottom: 15px; display: flex; flex-direction: column; overflow: hidden;
@@ -202,42 +229,16 @@
         .best-main-title { font-family: var(--font-title); font-size: 24px; color: #FFD700; text-shadow: 1px 1px 0 #fff; -webkit-text-stroke: 1px #888; margin-left: 10px; }
         .best-sub-title { font-size: 12px; color: #888; font-weight: bold; margin-left: 10px; }
         .best-grid-pop { display: flex; gap: 10px; flex: 1; overflow: hidden; }
-        
-        .b-col { 
-            flex: 1; width: 0; min-width: 0;
-            background: #FFFDE7; border-radius: 8px; padding: 2px; 
-            display: flex; flex-direction: column; justify-content: space-between; 
-            border: 2px solid #fff; overflow: hidden; 
-        }
-        
-        /* タイトル：2行許可・高さ拡張 */
-        .b-theme { 
-            height: 35px; /* ★拡張 */
-            background: #B0BEC5; border-radius: 5px; margin-bottom: 2px; 
-            font-size: 20px; color: #fff; text-align: center; 
-            white-space: normal; /* ★折り返し許可 */
-            word-break: break-all;
-            overflow: hidden; font-weight: bold; 
-            flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            line-height: 1.0;
-        }
+        .b-col { flex: 1; width: 0; min-width: 0; background: #FFFDE7; border-radius: 8px; padding: 2px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; overflow: hidden; }
+        .b-theme { height: 35px; background: #B0BEC5; border-radius: 5px; margin-bottom: 2px; font-size: 20px; color: #fff; text-align: center; white-space: normal; word-break: break-all; overflow: hidden; font-weight: bold; flex-shrink: 0; display: flex; align-items: center; justify-content: center; line-height: 1.0; }
         .b-theme.pink { background: var(--pop-pink); }
         .b-theme.purple { background: #AB47BC; }
-
         .b-list { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; overflow: hidden; }
         .b-row { display: flex; align-items: center; font-size: 18px; flex: 1; max-height: 33%;}
         .b-rank { display: inline-block; width: 20px; height: 20px; background: #555; color: #fff; border-radius: 50%; font-size: 12px; text-align: center; line-height: 20px; margin-right: 4px; flex-shrink: 0; }
-        
-        .b-val { 
-            flex: 1; width: auto; min-width: 0; border-bottom: 2px solid #fff; 
-            white-space: normal; word-break: break-all; overflow: hidden; 
-            line-height: 0.9; padding: 0; 
-            display: flex; align-items: center; height: 100%; 
-            font-size: 22px; 
-        }
+        .b-val { flex: 1; width: auto; min-width: 0; border-bottom: 2px solid #fff; white-space: normal; word-break: break-all; overflow: hidden; line-height: 0.9; padding: 0; display: flex; align-items: center; height: 100%; font-size: 22px; }
 
-        /* 下段：Free Space (聖域：変更なし) */
+        /* 下段：Free Space (聖域：固定) */
         .free-section-pop {
             flex: 1; background: var(--pop-cyan); border-radius: 15px; padding: 10px; border: 4px solid #fff;
             display: flex; flex-direction: column;
@@ -412,12 +413,13 @@
                                     </div>
                                     <div class="secret-box-pop">
                                         <div class="box-head-s">Secret Talk</div>
-                                        <div class="sec-body-center">
-                                            <div class="sec-row fixed">ここだけの話、</div>
-                                            <div class="sec-input-area">
+                                        <div class="sec-body-fixed">
+                                            <div class="sec-line-top">ここだけの話、</div>
+                                            <div class="sec-line-middle">
+                                                <span class="sec-label">実は</span>
                                                 <span class="sec-val-long" id="prev-secret"></span>
                                             </div>
-                                            <div class="sec-row sec-end fixed">です…</div>
+                                            <div class="sec-line-bottom">です…</div>
                                         </div>
                                     </div>
                                 </div>
@@ -628,7 +630,7 @@ function updateBirthday() {
     updateText('day', d);
 }
 
-// 修正：判定緩和とループ処理の修正
+// 修正：判定緩和とループ処理の修正 (安全装置付き)
 function adjustFontSize(el) {
     // まずフォントサイズをリセット（元の定義に戻す）
     el.style.fontSize = ''; 
@@ -637,9 +639,9 @@ function adjustFontSize(el) {
     let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style); 
     
-    // 最小フォントサイズ
-    const minFontSize = 10;
-    // 緩和：多少のはみ出し（4px）は許容する
+    // 最小フォントサイズ ★緩和
+    let minFontSize = 4;
+    
     const tolerance = 4;
 
     if (el.clientWidth === 0 || el.clientHeight === 0) return;
@@ -650,6 +652,12 @@ function adjustFontSize(el) {
         el.style.fontSize = fontSize + 'px';
     }
 }
+
+// フォント読み込み完了後に再計算（環境差対策）
+document.fonts.ready.then(function() {
+    const textFields = document.querySelectorAll('.fill-line, .fb-val, .na, .sec-val-long, .b-val, .b-theme');
+    textFields.forEach(field => adjustFontSize(field));
+});
 
 function updateIcon(input) {
     if (input.files && input.files[0]) {
@@ -708,7 +716,7 @@ async function generateImage() {
     const clone = original.cloneNode(true);
     sandbox.appendChild(clone);
 
-    // 画像生成前に一度フォント調整を走らせる（clone側で崩れないように）
+    // クローン側のフォント調整（念入りに）
     const textFields = clone.querySelectorAll('.fill-line, .fb-val, .na, .sec-val-long, .b-val, .b-theme');
     textFields.forEach(field => adjustFontSize(field));
 
